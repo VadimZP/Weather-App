@@ -1,0 +1,12 @@
+.active {
+    color: red;
+    font-weight: bold;
+}
+
+.navbar-menu{
+    justify-content: center;
+}
+
+.navbar-start {
+    margin-right: 0;
+}
