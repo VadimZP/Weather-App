@@ -48,10 +48,6 @@ export default class FetchData extends React.Component {
 
 
     render() {
-        console.log(this.state.data);
-        
         return (<DaysList days={this.state.data} />);
-        
-        
     }
 }
