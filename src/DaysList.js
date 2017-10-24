@@ -6,7 +6,7 @@ function DayItem(props) {
         <div className="card">
             <div className="card-image">
                 <figure className="image is-4by3">
-                    <img src="http://openweathermap.org/img/w/10n.png" alt="Placeholder image" />
+                    <img src={`http://openweathermap.org/img/w/${props.weatherImg}.png`} alt="Placeholder image" />
                 </figure>
             </div>
             <div className="card-content">
@@ -34,6 +34,7 @@ export default function DaysList(props) {
     const maxMinTemprt = [];
     const date = [];
     const weekDays = [];
+    const frequentWeather = [];
 
     let j = 0;
 
@@ -42,7 +43,8 @@ export default function DaysList(props) {
 
         const tempArr = [];
         const tempArrWeather = [];
-        let weather = {};
+        const weather = {};
+        
 
         for (let key in days[i]) {
             tempArr.push(days[i][key].main.temp);
@@ -56,8 +58,9 @@ export default function DaysList(props) {
         let weekDay = new Date(...getDate.split(',')).getDay();
 
         getFrequentValue(tempArrWeather, weather);
-        console.log(weather);
-        console.log(weather[Math.max(...Object.keys(weather))]);
+        frequentWeather.push(weather[Math.max(...Object.keys(weather))][0]);
+        
+        console.log(frequentWeather);
         
         date.push(getDate);
         weekDays.push(getWeekDayName(weekDay));
@@ -94,7 +97,7 @@ export default function DaysList(props) {
     const daysList = props.days.map((item, i) => 
                         <DayItem 
                             key={i} 
-                            /* weatherImg={} */
+                            weatherImg={frequentWeather[i]}
                             date={date[i]} 
                             dayOfTheWeek={weekDays[i]} 
                             minTemp={maxMinTemprt[i].min} 
