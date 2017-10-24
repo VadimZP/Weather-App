@@ -6,7 +6,7 @@ function DayItem(props) {
         <div className="card">
             <div className="card-image">
                 <figure className="image is-4by3">
-                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
+                    <img src="http://openweathermap.org/img/w/10n.png" alt="Placeholder image" />
                 </figure>
             </div>
             <div className="card-content">
@@ -30,22 +30,23 @@ DayItem.propTypes = {
 }
 
 export default function DaysList(props) {
-
     const days = props.days;
     const maxMinTemprt = [];
     const date = [];
     const weekDays = [];
-    
 
     let j = 0;
 
-    for (let i = 0; i < days.length; i++) {
+    days.forEach((item, i) => {
         maxMinTemprt.push({});
 
         const tempArr = [];
+        const tempArrWeather = [];
+        let weather = {};
 
         for (let key in days[i]) {
             tempArr.push(days[i][key].main.temp);
+            tempArrWeather.push(days[i][key].weather[0].icon);
         }
 
         maxMinTemprt[j].min = Math.min(...tempArr);
@@ -54,11 +55,15 @@ export default function DaysList(props) {
         let getDate = days[i].hours0.dt_txt.split(' ')[0];
         let weekDay = new Date(...getDate.split(',')).getDay();
 
+        getFrequentValue(tempArrWeather, weather);
+        console.log(weather);
+        console.log(weather[Math.max(...Object.keys(weather))]);
+        
         date.push(getDate);
         weekDays.push(getWeekDayName(weekDay));
 
         j++;
-    }
+    });
 
     function getWeekDayName(day) {
         if (day === 0) return 'Sunday';
@@ -68,12 +73,28 @@ export default function DaysList(props) {
         if (day === 4) return 'Thursday';
         if (day === 5) return 'Friday';
         if (day === 6) return 'Saturday';
+    }
 
+    function getFrequentValue(arg, obj) {
+        let removed = [];
+
+        const val = arg[0];
+
+        while (arg.indexOf(val) !== -1) {
+            removed.push(
+                arg.splice(arg.indexOf(val), 1)[0]
+            );
+        }
+
+        obj[removed.length] = removed;
+
+        arg.length && getFrequentValue(arg, obj);
     }
 
     const daysList = props.days.map((item, i) => 
                         <DayItem 
                             key={i} 
+                            /* weatherImg={} */
                             date={date[i]} 
                             dayOfTheWeek={weekDays[i]} 
                             minTemp={maxMinTemprt[i].min} 
