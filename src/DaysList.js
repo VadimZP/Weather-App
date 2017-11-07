@@ -46,10 +46,17 @@ export default function DaysList(props) {
         const weather = {};
         
 
-        for (let key in days[i]) {
+       /*  for (let key in days[i]) {
             tempArr.push(days[i][key].main.temp);
             tempArrWeather.push(days[i][key].weather[0].icon);
-        }
+            console.log(days[i][key]);
+        } */
+
+       Object.keys(days[i]).forEach(key => {
+            tempArr.push(days[i][key].main.temp);
+            tempArrWeather.push(days[i][key].weather[0].icon);
+            console.log(days[i][key]);
+        });
 
         maxMinTemprt[j].min = Math.min(...tempArr);
         maxMinTemprt[j].max = Math.max(...tempArr);
@@ -60,7 +67,7 @@ export default function DaysList(props) {
         getFrequentValue(tempArrWeather, weather);
         frequentWeather.push(weather[Math.max(...Object.keys(weather))][0]);
         
-        console.log(frequentWeather);
+        // console.log(frequentWeather);
         
         date.push(getDate);
         weekDays.push(getWeekDayName(weekDay));
