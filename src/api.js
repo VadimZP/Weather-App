@@ -12,44 +12,44 @@ export default class FetchData extends React.Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            axios.get('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
-                .then(res => {
-                    const data = res.data.list;
-                    const sortedData = [];
+        axios.get('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
+            .then(res => {
+                const data = res.data.list;
+                const sortedData = [];
 
-                    let j = 0;
-                    let k = 0;
+                let j = 0;
+                let k = 0;
 
-                    for (let i = 1; i < data.length; i++) {
-                        if (!sortedData.length) sortedData.push({});
+                for (let i = 1; i < data.length; i++) {
+                    if (!sortedData.length) sortedData.push({});
 
-                        let prevVal = data[i - 1].dt_txt.split(' ');
-                        let currentVal = data[i].dt_txt.split(' ');
+                    let prevVal = data[i - 1].dt_txt.split(' ');
+                    let currentVal = data[i].dt_txt.split(' ');
 
-                        if (currentVal[0] === prevVal[0]) {
-                            sortedData[j][`hours${k++}`] = data[i - 1];
-                        } else {
-                            sortedData[j][`hours${k++}`] = data[i - 1];
-                            sortedData.push({});
-                            j++;
-                            k = 0;
-                            sortedData[j][`hours${k++}`] = data[i];
-                        }
+                    if (currentVal[0] === prevVal[0]) {
+                        sortedData[j][`hours${k++}`] = data[i - 1];
+                    } else {
+                        sortedData[j][`hours${k++}`] = data[i - 1];
+                        sortedData.push({});
+                        j++;
+                        k = 0;
+                        sortedData[j][`hours${k++}`] = data[i];
                     }
-                    this.setState({ data: sortedData });
-
-                    console.log(sortedData);
-                })
-                .catch(function (error) {
-                    console.log(error);
+                }
+                this.setState({
+                    data: sortedData
                 });
-        }, 3000)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+}
 
-    }
 
-
-    render() {
-        return (<DaysList days={this.state.data} />);
+render() {
+    return ( < DaysList days = {
+            this.state.data
+        }
+        />);
     }
 }

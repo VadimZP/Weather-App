@@ -6,7 +6,7 @@ function DayItem(props) {
         <div className="card">
             <div className="card-image">
                 <figure className="image is-4by3">
-                    <img src={`http://openweathermap.org/img/w/${props.weatherImg}.png`} alt="Placeholder image" />
+                    <img src={`http://openweathermap.org/img/w/${props.weatherImg}.png`} style={{width: 50, height: 50}} alt="Placeholder image" />
                 </figure>
             </div>
             <div className="card-content">
@@ -38,19 +38,12 @@ export default function DaysList(props) {
 
     let j = 0;
 
-    days.forEach((item, i) => {
+     for (let i = 0; i < days.length; i++) {
         maxMinTemprt.push({});
 
         const tempArr = [];
         const tempArrWeather = [];
         const weather = {};
-        
-
-       /*  for (let key in days[i]) {
-            tempArr.push(days[i][key].main.temp);
-            tempArrWeather.push(days[i][key].weather[0].icon);
-            console.log(days[i][key]);
-        } */
 
        Object.keys(days[i]).forEach(key => {
             tempArr.push(days[i][key].main.temp);
@@ -64,16 +57,14 @@ export default function DaysList(props) {
         let weekDay = new Date(...getDate.split(',')).getDay();
 
         getFrequentValue(tempArrWeather, weather);
+
         frequentWeather.push(weather[Math.max(...Object.keys(weather))][0]);
-        
-        // console.log(frequentWeather);
-        
         date.push(getDate);
         weekDays.push(getWeekDayName(weekDay));
 
         j++;
-    });
-
+    }
+    
     function getWeekDayName(day) {
         if (day === 0) return 'Sunday';
         if (day === 1) return 'Monday';

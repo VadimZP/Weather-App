@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter, Route} from 'react-router-dom';
-import './index.css';
 
 import App from './App'; 
 import App2 from './App2'; 
 import Navbar from './Navbar';
 import FetchData from './api';
+import Graph from './Graph';
 
 ReactDOM.render(
     <div>
+    <Graph/>
         <HashRouter>
             <div>
                 <Navbar/>

@@ -1,0 +1,52 @@
+.active {
+    color: red;
+    font-weight: bold;
+}
+
+.navbar-menu{
+    justify-content: center;
+}
+
+.navbar-menu .navbar-start {
+    margin-right: 0;
+}
+
+ul {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  li {
+    max-width: 300px;
+  }
+
+  .card{
+    cursor: pointer;
+    width: 10%;
+  }
+
+  .card:hover {
+    box-shadow: 0 2px 17px rgba(10,10,10,.1), 0 0 0 2px rgba(10,10,10,.1);
+    transition: 0.5s;
+  }
+
+  .card-content {
+    padding: 0;
+    padding-bottom: 10px;
+  }
+
+  .card-image img{
+    margin: auto;
+  }
+
+  .media-content {
+    text-align: center;
+  }
+
+  .media-content p.title.is-4 {
+    font-size: 1rem;
+  }
+
+  .media-content p {
+    font-size: .9rem;
+  }

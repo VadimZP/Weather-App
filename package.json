@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@vx/group": "0.0.143",
+    "@vx/mock-data": "0.0.144",
+    "@vx/scale": "0.0.143",
+    "@vx/shape": "0.0.146",
     "axios": "^0.16.2",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
