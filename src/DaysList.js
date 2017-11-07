@@ -55,7 +55,6 @@ export default function DaysList(props) {
        Object.keys(days[i]).forEach(key => {
             tempArr.push(days[i][key].main.temp);
             tempArrWeather.push(days[i][key].weather[0].icon);
-            console.log(days[i][key]);
         });
 
         maxMinTemprt[j].min = Math.min(...tempArr);
