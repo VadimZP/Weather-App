@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@vx/axis": "0.0.146",
+    "@vx/gradient": "0.0.143",
     "@vx/group": "0.0.143",
     "@vx/mock-data": "0.0.144",
     "@vx/scale": "0.0.143",

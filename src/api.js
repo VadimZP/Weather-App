@@ -33,9 +33,10 @@ export default class FetchData extends React.Component {
                         sortedData.push({});
                         j++;
                         k = 0;
-                        sortedData[j][`hours${k++}`] = data[i];
+                        // sortedData[j][`hours${k++}`] = data[i];
                     }
                 }
+                console.log(sortedData);
                 this.setState({
                     data: sortedData
                 });
