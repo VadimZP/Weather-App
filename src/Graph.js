@@ -1,14 +1,31 @@
 import React from 'react';
-import { appleStock } from '@vx/mock-data';
 import { Group } from '@vx/group';
 import { scaleTime, scaleLinear } from '@vx/scale';
-import { AreaClosed } from '@vx/shape';
+import { LinePath } from '@vx/shape';
 import { AxisLeft, AxisBottom } from '@vx/axis';
 import { LinearGradient } from '@vx/gradient';
 import { extent, max } from 'd3-array';
 
 export default function Graph(props) {
-    const data = [{hour:15, time: 1}, {hour:20, time: 1}, {hour:10, time: 1}];
+    const dataFromApi = props.data;
+    const data = [];
+
+    let j = 0;
+
+    for (let i = 5; i < dataFromApi.length; i++) {
+
+        Object.keys(dataFromApi[i]).forEach(key => {
+            let hours = dataFromApi[i][key].dt_txt.split(' ')[1].slice(0, 2);
+            let minutes = dataFromApi[i][key].dt_txt.split(' ')[1].slice(3, 5);
+
+            data.push({});
+            data[j].hour = +hours;
+            data[j].temprt = dataFromApi[i][key].main.temp;
+            j++;
+        });
+       
+    }
+    console.log(data);
     const width = 750;
     const height = 400;
     const margin = {
@@ -22,10 +39,9 @@ export default function Graph(props) {
     const yMax = height - margin.top - margin.bottom;
 
     const x = d => d.hour; 
-    const y = d => d.time;
+    const y = d => d.temprt;
 
-
-    const xScale = scaleTime({
+    const xScale = scaleLinear({
         range: [0, xMax],
         domain: extent(data, x)
     });
@@ -35,25 +51,19 @@ export default function Graph(props) {
         domain: [0, max(data, y)],
       });
     
-    
     return (
       <svg width={width} height={height}>
-      <LinearGradient
-        from='#fbc2eb'
-        to='#a6c1ee'
-        id='gradient'
-      />
 
       <Group top={margin.top} left={margin.left}>
 
-        <AreaClosed
+        <LinePath
           data={data}
           xScale={xScale}
           yScale={yScale}
           x={x}
           y={y}
-          fill={"url(#gradient)"}
-          stroke={""}
+          stroke={"black"}
+          strokeWidth={2}
         />
 
         <AxisLeft
@@ -71,6 +81,8 @@ export default function Graph(props) {
           label={'Years'}
           stroke={'#1b1a1e'}
           tickTextFill={'#1b1a1e'}
+          numTicks={20}
+          tickValues={data.map(obj => obj.hour)}
         />
 
       </Group>

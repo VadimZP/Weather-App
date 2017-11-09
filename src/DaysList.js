@@ -35,7 +35,6 @@ export default function DaysList(props) {
     const date = [];
     const weekDays = [];
     const frequentWeather = [];
-    const hours = []
 
     let j = 0;
 
@@ -47,8 +46,9 @@ export default function DaysList(props) {
         const weather = {};
 
        Object.keys(days[i]).forEach(key => {
-            hours.push(days[i][key].dt_txt.split(' ')[1].slice(0, -3));
+            // hours.push(days[i][key].dt_txt.split(' ')[1].slice(0, -3));
             tempArr.push(days[i][key].main.temp);
+            // temprt.push(days[i][key].main.temp);
             tempArrWeather.push(days[i][key].weather[0].icon);
         });
 
@@ -66,8 +66,6 @@ export default function DaysList(props) {
 
         j++;
     }
-
-    console.log(hours);
     
     function getWeekDayName(day) {
         if (day === 0) return 'Sunday';

@@ -10,7 +10,6 @@ import Graph from './Graph';
 
 ReactDOM.render(
     <div>
-    <Graph/>
         <HashRouter>
             <div>
                 <Navbar/>

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import DaysList from './DaysList';
+import Graph from './Graph';
 
 export default class FetchData extends React.Component {
     constructor(props) {
@@ -48,9 +49,11 @@ export default class FetchData extends React.Component {
 
 
 render() {
-    return ( < DaysList days = {
-            this.state.data
-        }
-        />);
+    return ( 
+        <div>
+            <Graph data={this.state.data}/>
+            <DaysList days={this.state.data}/>
+        </div>
+    );
     }
 }
