@@ -16,14 +16,12 @@ export default class FetchData extends React.Component {
         axios.get('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
             .then(res => {
                 const data = res.data.list;
-                const sortedData = [];
+                const sortedData = [{}];
 
                 let j = 0;
                 let k = 0;
 
                 for (let i = 1; i < data.length; i++) {
-                    if (!sortedData.length) sortedData.push({});
-
                     let prevVal = data[i - 1].dt_txt.split(' ');
                     let currentVal = data[i].dt_txt.split(' ');
 
@@ -34,7 +32,6 @@ export default class FetchData extends React.Component {
                         sortedData.push({});
                         j++;
                         k = 0;
-                        // sortedData[j][`hours${k++}`] = data[i];
                     }
                 }
                 console.log(sortedData);

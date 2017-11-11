@@ -6,7 +6,7 @@ import { AxisLeft, AxisBottom } from '@vx/axis';
 import { LinearGradient } from '@vx/gradient';
 import { extent, max } from 'd3-array';
 
-export default function Graph(props) {
+const Graph = props => {
     const dataFromApi = props.data;
     const data = [];
 
@@ -89,3 +89,5 @@ export default function Graph(props) {
     </svg>
     );
 }
+
+export default Graph;

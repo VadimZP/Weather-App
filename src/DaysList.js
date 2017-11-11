@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function DayItem(props) {
+const DayItem = props => {
     return (
         <div className="card">
             <div className="card-image">
@@ -29,7 +29,7 @@ DayItem.propTypes = {
     maxTemp: PropTypes.number
 }
 
-export default function DaysList(props) {
+const DaysList = props => {
     const days = props.days;
     const maxMinTemprt = [];
     const date = [];
@@ -46,9 +46,7 @@ export default function DaysList(props) {
         const weather = {};
 
        Object.keys(days[i]).forEach(key => {
-            // hours.push(days[i][key].dt_txt.split(' ')[1].slice(0, -3));
             tempArr.push(days[i][key].main.temp);
-            // temprt.push(days[i][key].main.temp);
             tempArrWeather.push(days[i][key].weather[0].icon);
         });
 
@@ -106,3 +104,4 @@ export default function DaysList(props) {
     return <ul>{daysList}</ul>;
 }
 
+export default DaysList;
