@@ -10,9 +10,15 @@ const Graph = props => {
     const dataFromApi = props.data;
     const data = [];
 
+    let index =  props.clickedDay;
+    console.log(props);
+    if(index === null) index = 0;
+
     let j = 0;
 
-    for (let i = 5; i < dataFromApi.length; i++) {
+
+
+/*     for (let i = 0; i < dataFromApi.length; i++) {
 
         Object.keys(dataFromApi[i]).forEach(key => {
             let hours = dataFromApi[i][key].dt_txt.split(' ')[1].slice(0, 2);
@@ -20,12 +26,13 @@ const Graph = props => {
 
             data.push({});
             data[j].hour = +hours;
-            data[j].temprt = dataFromApi[i][key].main.temp;
+            data[j].temprt = ~~dataFromApi[i][key].main.temp;
             j++;
         });
-       
     }
-    console.log(data);
+
+    console.log(data); */
+    
     const width = 750;
     const height = 400;
     const margin = {
@@ -70,7 +77,7 @@ const Graph = props => {
           scale={yScale}
           top={0}
           left={0}
-          label={'Close Price ($)'}
+          label={'Temperature'}
           stroke={'#1b1a1e'}
           tickTextFill={'#1b1a1e'}
         />
@@ -78,11 +85,11 @@ const Graph = props => {
         <AxisBottom
           scale={xScale}
           top={yMax}
-          label={'Years'}
+          label={'Hours'}
           stroke={'#1b1a1e'}
           tickTextFill={'#1b1a1e'}
-          numTicks={20}
           tickValues={data.map(obj => obj.hour)}
+          tickFormat={(value, index) => `${value}:00`}
         />
 
       </Group>
