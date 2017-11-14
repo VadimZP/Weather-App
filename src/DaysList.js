@@ -1,44 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import DayItem from './DayItem';
-
-/* const DayItem = props => {
-
-    const handleClick = (e) => {
-        console.log(props.id);
-    }
-
-    return (
-        <div>
-            <Graph clickedDay={props.id}/>
-            <div className="card" onClick={handleClick}>
-                <div className="card-image">
-                    <figure className="image is-4by3">
-                        <img src={`http://openweathermap.org/img/w/${props.weatherImg}.png`} style={{width: 50, height: 50}} alt="Placeholder image" />
-                    </figure>
-                </div>
-                <div className="card-content">
-                    <div className="media">
-                        <div className="media-content">
-                            <p className="title is-4">{props.dayOfTheWeek}</p>
-                            <p>{props.date}</p>
-                            <p>{props.minTemp} {props.maxTemp}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-} */
-
-
-
-DayItem.propTypes = {
-    date: PropTypes.string,
-    dayOfTheWeek: PropTypes.string,
-    minTemp: PropTypes.number,
-    maxTemp: PropTypes.number
-}
 
 /* const DaysList = props => {
     const days = props.days;
@@ -199,20 +160,15 @@ function sortData() {
 class DaysList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            kek: 0
-        }
 
-        this.handleClick = this.handleClick.bind(this);
+        this.handleClick = this.props.onClick;
     }
 
-    handleClick(childId) {
+   /*  handleClick(childId) {
         this.setState({
             kek: childId
         })
-
-        console.log('kek');
-    }
+    } */
 
     render() {
         return <ul>{sortData.call(this)}</ul>;

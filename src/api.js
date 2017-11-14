@@ -8,8 +8,18 @@ export default class FetchData extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            day: 0
         };
+
+        this.handleClick1 = this.handleClick1.bind(this);
+    }
+
+    handleClick1(childId) {
+        this.setState({
+            day: childId
+        })
+        console.log('kek');
     }
 
     componentDidMount() {
@@ -34,7 +44,6 @@ export default class FetchData extends React.Component {
                         k = 0;
                     }
                 }
-                console.log(sortedData);
                 this.setState({
                     data: sortedData
                 });
@@ -48,9 +57,9 @@ export default class FetchData extends React.Component {
 render() {
     return ( 
         <div>
-            <Graph data={this.state.data}/>
-            <DaysList days={this.state.data}/>
+            <Graph day={this.state.day} firstDay={this.state.data[0]}/>
+            <DaysList days={this.state.data} onClick={this.handleClick1}/>
         </div>
-    );
+        );
     }
 }
