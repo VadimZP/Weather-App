@@ -4,7 +4,7 @@ import axios from 'axios';
 import DaysList from './DaysList';
 import Graph from './Graph';
 
-export default class FetchData extends React.Component {
+export default class FetchData extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +19,6 @@ export default class FetchData extends React.Component {
         this.setState({
             day: childId
         })
-        console.log('kek');
     }
 
     componentDidMount() {
@@ -31,7 +30,7 @@ export default class FetchData extends React.Component {
                 let j = 0;
                 let k = 0;
 
-                for (let i = 1; i < data.length; i++) {
+                for (let i = 1, len = data.length; i < len; i++) {
                     let prevVal = data[i - 1].dt_txt.split(' ');
                     let currentVal = data[i].dt_txt.split(' ');
 
@@ -57,7 +56,7 @@ export default class FetchData extends React.Component {
 render() {
     return ( 
         <div>
-            <Graph day={this.state.day} firstDay={this.state.data[0]}/>
+            <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
             <DaysList days={this.state.data} onClick={this.handleClick1}/>
         </div>
         );
