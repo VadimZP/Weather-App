@@ -14,7 +14,7 @@ export default class DayItem extends React.Component {
             <div className="card" id={this.props.id} onClick={this.props.onClick.bind(null, this.props.days)}>
                 <div className="card-image">
                     <figure className="image is-4by3">
-                        <img src={`http://openweathermap.org/img/w/${this.props.weatherImg}.png`} style={{width: 50, height: 50}} alt="Placeholder image" />
+                        <img src={`http://openweathermap.org/img/w/${this.props.weatherImg}.png`} style={{width: 50, height: 50}} alt="weather" />
                     </figure>
                 </div>
                 <div className="card-content">

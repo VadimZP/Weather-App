@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import FetchData from './api';
-import Graph from './Graph';
 
 ReactDOM.render(
     <div>

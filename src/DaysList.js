@@ -164,12 +164,6 @@ class DaysList extends React.Component {
         this.handleClick = this.props.onClick;
     }
 
-   /*  handleClick(childId) {
-        this.setState({
-            kek: childId
-        })
-    } */
-
     render() {
         return <ul>{sortData.call(this)}</ul>;
     }

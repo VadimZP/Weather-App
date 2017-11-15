@@ -12,10 +12,10 @@ export default class FetchData extends React.PureComponent {
             day: 0
         };
 
-        this.handleClick1 = this.handleClick1.bind(this);
+        this.handleClick= this.handleClick.bind(this);
     }
 
-    handleClick1(childId) {
+    handleClick(childId) {
         this.setState({
             day: childId
         })
@@ -57,7 +57,7 @@ render() {
     return ( 
         <div>
             <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
-            <DaysList days={this.state.data} onClick={this.handleClick1}/>
+            <DaysList days={this.state.data} onClick={this.handleClick}/>
         </div>
         );
     }
