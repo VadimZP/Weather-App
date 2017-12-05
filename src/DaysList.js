@@ -6,14 +6,39 @@ const R = require('ramda');
 let [compose, map, prop, head] = [R.compose, R.map, R.prop, R.head];
 
 function sortData() {
+
     const days = this.props.days;
 
-    const date = compose(map(prop('data')), map(head))(days);
-    const weekDays = [];
-    const maxMinTemprt = [];
+    const date = map(compose(prop('data'), head))(days);
+
+    const convertToString = (el) => {
+
+        let d = new Date(...el.split(','));
+
+        d.setDate(d.getDate());
+
+        return d.toDateString();
+    }
+
+    const weekDays = map(compose(R.take(3), convertToString), date);
+
+    const temprtOfEveryHour = map(R.path(['main', 'temp']));
+
+    const maxMinTemprt = map(temprtOfEveryHour, days);  
+             
     const frequentWeather = [];
 
-    console.log(date);
+    console.log(days);
+
+    console.log(maxMinTemprt);
+
+
+  /*   weekDays.forEach(el => {
+        let d = new Date(...el.split(','))
+        d.setDate(d.getDate() ) 
+       console.log(d)
+        }
+    ); */
 /*
     let j = 0;
 
