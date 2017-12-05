@@ -7,6 +7,10 @@ import Graph from './Graph';
 const R = require('ramda');
 const Future = require('fluture');
 
+let [compose, filter, map, concat, merge, length, prop, propEq, drop, head] = 
+    
+    [R.compose, R.filter, R.map, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
+
 export default class FetchData extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -36,52 +40,47 @@ export default class FetchData extends React.PureComponent {
 
         const usizedList = getData('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
             .map(res => res.data.list.map(obj => (
-                 R.merge(obj, {
+                 merge(obj, {
                     data: obj.dt_txt.split(' ')[0],
                     time: obj.dt_txt.split(' ')[1]
                 })
             )))
 
-            
-        const wrapper = () => {
+        const sortByDaysFunc = (arr, setState, res) => {
 
-            let sortedData = [];
+            'use strict';
 
-            
+            const getDay = compose(propEq('data'), prop('data'), head);
 
-            return function sortByDaysFunc(res) {
+            const getRelativeData = filter(getDay(res));
 
-                const getDay = R.compose(R.propEq('data'), R.prop('data'), R.head);
+            const sortedData = concat(arr, [getRelativeData(res)]);
 
-                const getRelativeData = R.filter(getDay(res));
+            const relativeDataLen = length(getRelativeData(res));
 
-                sortedData.push(getRelativeData(res))
+            const removeFromRes = compose(drop(relativeDataLen));
 
-                // console.log(getRelativeData(res));
+            const resWithoutCurrentDay = removeFromRes(res);
 
-                const relativeDataLen = R.length(getRelativeData(res));
-
-                const removeFromRes = R.compose(R.drop(relativeDataLen));
-
-                const resWithoutCurrentDay = removeFromRes(res);
-
-                console.log(sortedData)
-            
-                // sortByDaysFunc(resWithoutCurrentDay)
-               
-            }
-
-
+            resWithoutCurrentDay.length
+                ? sortByDaysFunc(sortedData, this.setState.bind(this), resWithoutCurrentDay)
+                : setState({ data: sortedData });
         }
 
-    /*     const sortByDaysFunc = (res) => {
+        usizedList.fork(
+            console.error, 
+            R.curry(sortByDaysFunc)([], this.setState.bind(this))
+        );
 
 
-        }  */ 
+          /* 
+                    In the end we have a sorted array with six day-objects.
+                    They have have info about weather for every 3 hour (0:00, 3:00, 6:00 ...).
 
-        usizedList.fork(console.error, wrapper());
+                    [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
+          */
 
-        axios.get('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
+       /*  axios.get('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
             .then(res => {
 
                 const data = res.data.list;
@@ -109,17 +108,7 @@ export default class FetchData extends React.PureComponent {
                     }
                 }
 
-                 /* 
-                    In the end we have a sorted array with six day-objects.
-                    They have have info about weather for every 3 hour (0:00, 3:00, 6:00 ...).
-
-                    [{
-                    hours0 (mean 0:00): {dt: 1512313200, main: {…}, weather: Array(1), clouds: {…}, wind: {…}, …}
-                    hours1 (mean 3:00):{dt: 1512324000, main: {…}, weather: Array(1), clouds: {…}, wind: {…}, …}
-                    hours2 (mean 6:00):{dt: 1512334800, main: {…}, weather: Array(1), clouds: {…}, wind: {…}, …}
-                    ...
-                    }, {}, {}, {}, {}, {}]
-                */
+               
 
                 this.setState({
                     data: sortedData
@@ -127,7 +116,7 @@ export default class FetchData extends React.PureComponent {
             })
             .catch(function (error) {
                 console.log(error);
-            });
+            }); */
 }
 
 
