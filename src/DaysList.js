@@ -24,21 +24,51 @@ function sortData() {
 
     const temprtOfEveryHour = map(R.path(['main', 'temp']));
 
-    const maxMinTemprt = map(temprtOfEveryHour, days);  
-             
-    const frequentWeather = [];
+    const temperaturesOfEachDay = map(temprtOfEveryHour, days);
+    
+    const maxOrMin = (minOrMax, arr) => Math[minOrMax](...arr);
 
-    console.log(days);
+    const curriedMaxOrMin = R.curry(maxOrMin);
+     
+    const minTemprt = map(curriedMaxOrMin('min'), temperaturesOfEachDay);
 
-    console.log(maxMinTemprt);
+    const maxTemprt = map(curriedMaxOrMin('max'), temperaturesOfEachDay);
+    
+    const frequentWeather = map(
+        compose(
+           map(prop('icon')), map(head), map(R.prop('weather') ) 
+        ), days
+    ); 
 
 
-  /*   weekDays.forEach(el => {
-        let d = new Date(...el.split(','))
-        d.setDate(d.getDate() ) 
-       console.log(d)
+    var arr = ["10n", "13n", "13d", 3, 3, 3, 3, 3, 3, 4, "01d", "01d", "03d", 1, "13n", "10n", "10n"];
+
+    var sorted = arr.sort();
+
+    var obj = {};
+    
+    var tempArray = [];
+
+    sorted.forEach((val, i, arr) => {
+
+        if (arr[i] != arr[i + 1]) {
+            tempArray.push(arr[i]);
+            obj[tempArray.length] = tempArray;
+            tempArray = [];   
+        } else {
+            tempArray.push(arr[i]);
         }
-    ); */
+
+    });
+
+    const numsArr = Object.keys(obj).map(el => +el);
+
+    const getCommon = obj[Math.max(...numsArr)];
+
+    console.log(getCommon);
+
+
+
 /*
     let j = 0;
 
@@ -104,8 +134,8 @@ function sortData() {
             weatherImg={frequentWeather[i]}
             date={date[i]}
             dayOfTheWeek={weekDays[i]}
-            minTemp={maxMinTemprt[i].min}
-            maxTemp={maxMinTemprt[i].max}
+            minTemp={minTemprt[i]}
+            maxTemp={maxTemprt[i]}
         />);
 
     return daysList
