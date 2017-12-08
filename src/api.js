@@ -19,7 +19,7 @@ export default class FetchData extends React.PureComponent {
             day: 0
         };
 
-        this.handleClick= this.handleClick.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(childId) {
@@ -30,7 +30,7 @@ export default class FetchData extends React.PureComponent {
 
     componentDidMount() {
 
-        /* 
+        /** 
                    We are getting unsized array.
 
                    [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
@@ -46,25 +46,33 @@ export default class FetchData extends React.PureComponent {
                 })
             )))
 
+
+        /**
+        * This function distributes not sorted weather API data by days.
+        * @param {array} arr - array for grouping data.
+        * @param {react method} setState - pass structured data to react component's state.
+        * @param {array} res - data from API.
+        */
+
         const sortByDaysFunc = (arr, setState, res) => {
 
             'use strict';
 
             const getDay = compose(propEq('data'), prop('data'), head);
 
-            const getRelativeData = filter(getDay(res));
+            const getRelativeToDayData = filter(getDay(res));
 
-            const sortedData = concat(arr, [getRelativeData(res)]);
+            const groupedData = concat(arr, [getRelativeToDayData(res)]);
 
-            const relativeDataLen = length(getRelativeData(res));
+            const relativeDataLen = length(getRelativeToDayData(res));
 
             const removeFromRes = compose(drop(relativeDataLen));
 
             const resWithoutCurrentDay = removeFromRes(res);
 
             resWithoutCurrentDay.length
-                ? sortByDaysFunc(sortedData, this.setState.bind(this), resWithoutCurrentDay)
-                : setState({ data: sortedData });
+                ? sortByDaysFunc(groupedData, this.setState.bind(this), resWithoutCurrentDay)
+                : setState({ data: groupedData });
         }
 
         usizedList.fork(
@@ -72,53 +80,13 @@ export default class FetchData extends React.PureComponent {
             R.curry(sortByDaysFunc)([], this.setState.bind(this))
         );
 
-
-          /* 
+          /** 
                     In the end we have a sorted array with six day-objects.
                     They have have info about weather for every 3 hour (0:00, 3:00, 6:00 ...).
 
                     [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
           */
-
-       /*  axios.get('http://api.openweathermap.org/data/2.5/forecast?id=687700&units=metric&APPID=589954fc426476988cc0be8d6ed03349')
-            .then(res => {
-
-                const data = res.data.list;
-                const sortedData = [{}];
-
-                // console.log(R.filter(sameDay, data));
-
-                let j = 0;
-                let k = 0;
-
-                for (let i = 1, len = data.length; i < len; i++) {
-                   
-                    let prevVal = data[i - 1].dt_txt.split(' ');
-                    let currentVal = data[i].dt_txt.split(' ');
-
-                    // console.log(currentVal);
-
-                    if (currentVal[0] === prevVal[0]) {
-                        sortedData[j][`hours${k++}`] = data[i - 1];
-                    } else {
-                        sortedData[j][`hours${k++}`] = data[i - 1];
-                        sortedData.push({});
-                        j++;
-                        k = 0;
-                    }
-                }
-
-               
-
-                this.setState({
-                    data: sortedData
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            }); */
 }
-
 
 render() {
     return ( 

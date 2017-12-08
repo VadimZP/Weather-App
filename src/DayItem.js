@@ -32,7 +32,7 @@ export default class DayItem extends React.Component {
 }
 
 DayItem.propTypes = {
-    days: PropTypes.object,
+    days: PropTypes.array,
     date: PropTypes.string,
     dayOfTheWeek: PropTypes.string,
     minTemp: PropTypes.number,

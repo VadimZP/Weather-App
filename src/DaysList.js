@@ -3,13 +3,25 @@ import DayItem from './DayItem';
 
 const R = require('ramda');
 
-let [compose, map, prop, head] = [R.compose, R.map, R.prop, R.head];
+let [compose, map, curry, prop, head, take, path] = 
+
+    [R.compose, R.map, R.curry, R.prop, R.head, R.take, R.path];
+
+
+/** This function retrieves data for showing weather */
 
 function sortData() {
 
     const days = this.props.days;
 
+    console.log(days);
+
+    /** Get YYYY-MM-DD from every day */
+
     const date = map(compose(prop('data'), head))(days);
+
+
+    /** To retrieve weekday name we need to covert Date obj to string */
 
     const convertToString = (el) => {
 
@@ -20,127 +32,74 @@ function sortData() {
         return d.toDateString();
     }
 
-    const weekDays = map(compose(R.take(3), convertToString), date);
+    const weekDays = map(compose(take(3), convertToString), date);
 
-    const temprtOfEveryHour = map(R.path(['main', 'temp']));
+
+    /** Get day temperature and then compute max and min value */
+    
+    const temprtOfEveryHour = map(path(['main', 'temp']));
 
     const temperaturesOfEachDay = map(temprtOfEveryHour, days);
     
     const maxOrMin = (minOrMax, arr) => Math[minOrMax](...arr);
 
-    const curriedMaxOrMin = R.curry(maxOrMin);
+    const curriedMaxOrMin = curry(maxOrMin);
      
     const minTemprt = map(curriedMaxOrMin('min'), temperaturesOfEachDay);
 
     const maxTemprt = map(curriedMaxOrMin('max'), temperaturesOfEachDay);
     
-    const frequentWeather = map(
+
+    /** Get image of common weather during the day */
+
+    const weatherImgs = map(
         compose(
-           map(prop('icon')), map(head), map(R.prop('weather') ) 
+           map(prop('icon')), map(head), map(prop('weather') ) 
         ), days
     ); 
 
+    function commonVal(arr) {
+        const sorted = arr.sort();
 
-    var arr = ["10n", "13n", "13d", 3, 3, 3, 3, 3, 3, 4, "01d", "01d", "03d", 1, "13n", "10n", "10n"];
+        let obj = {};
 
-    var sorted = arr.sort();
+        let tempArray = [];
 
-    var obj = {};
-    
-    var tempArray = [];
-
-    sorted.forEach((val, i, arr) => {
-
-        if (arr[i] != arr[i + 1]) {
-            tempArray.push(arr[i]);
-            obj[tempArray.length] = tempArray;
-            tempArray = [];   
-        } else {
-            tempArray.push(arr[i]);
-        }
-
-    });
-
-    const numsArr = Object.keys(obj).map(el => +el);
-
-    const getCommon = obj[Math.max(...numsArr)];
-
-    console.log(getCommon);
-
-
-
-/*
-    let j = 0;
-
-    for (let i = 0; i < days.length; i++) {
-        maxMinTemprt.push({});
-
-        const tempArr = [];
-        const tempArrWeather = [];
-        const weather = {};
-
-        Object.keys(days[i]).forEach(key => {
-            tempArr.push(days[i][key].main.temp);
-            tempArrWeather.push(days[i][key].weather[0].icon);
+        sorted.forEach((val, i, arr) => {
+            if (arr[i] !== arr[i + 1]) {
+                tempArray.push(arr[i]);
+                obj[tempArray.length] = tempArray;
+                tempArray = [];
+            } else {
+                tempArray.push(arr[i]);
+            }
         });
 
-        maxMinTemprt[j].min = Math.min(...tempArr);
-        maxMinTemprt[j].max = Math.max(...tempArr);
+        const numsArr = Object.keys(obj).map(el => +el);
 
-        let getDate = days[i].hours0.dt_txt.split(' ')[0];
-        let weekDay = new Date(...getDate.split(',')).getDay();
+        const getCommon = obj[Math.max(...numsArr)][0];
 
-        getFrequentValue(tempArrWeather, weather);
-
-        frequentWeather.push(weather[Math.max(...Object.keys(weather))][0]);
-        date.push(getDate);
-        weekDays.push(getWeekDayName(weekDay));
-
-        j++;
+        return getCommon;
     }
 
-    function getWeekDayName(day) {
-        if (day === 0) return 'Sunday';
-        if (day === 1) return 'Monday';
-        if (day === 2) return 'Tuesday';
-        if (day === 3) return 'Wednesday';
-        if (day === 4) return 'Thursday';
-        if (day === 5) return 'Friday';
-        if (day === 6) return 'Saturday';
-    }
-
-    function getFrequentValue(arg, obj) {
-        let removed = [];
-
-        const val = arg[0];
-
-        while (arg.indexOf(val) !== -1) {
-            removed.push(
-                arg.splice(arg.indexOf(val), 1)[0]
-            );
-        }
-
-        obj[removed.length] = removed;
-
-        arg.length && getFrequentValue(arg, obj);
-    } */
-    
+    const getCommonWeather = map(arr => commonVal(arr), weatherImgs);
+ 
     const daysList = this.props.days.map((item, i) =>
+
         <DayItem
             onClick={this.handleClick}
             days={days[i]}
             key={i}
             id={i}
-            weatherImg={frequentWeather[i]}
+            weatherImg={getCommonWeather[i]}
             date={date[i]}
             dayOfTheWeek={weekDays[i]}
             minTemp={minTemprt[i]}
             maxTemp={maxTemprt[i]}
         />);
 
-    return daysList
+    return daysList;
 }
-
 
 class DaysList extends React.Component {
     constructor(props) {
