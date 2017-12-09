@@ -64,6 +64,30 @@ const Graph = props => {
 		nice: true,
 	});
 
+	const glyphDot = (d, i) => {
+		return (<g key={`line-point-${i}`}>
+			<GlyphDot>
+				<text
+					x={xScale(x(d))}
+					y={yScale(y(d))}
+					dx={10}
+					fill={"white"}
+					stroke={"black"}
+					strokeWidth={1}
+					fontSize={11}
+				>
+					{data[i].temp}
+				</text>
+			</GlyphDot>
+			<GlyphDot
+				cx={xScale(x(d))}
+				cy={yScale(y(d))}
+				r={4}
+				fill='red'
+			/>
+		</g> )
+	}
+
 	return (
 		<svg style={{ borderBottom: '1px solid #000' }} width={width} height={height}>
 			<LinearGradient id="gradient" to="#EFEEFC" from="#CBC8EF" />
@@ -87,29 +111,7 @@ const Graph = props => {
 					strokeWidth={2}
 					curve={curveMonotoneX}
 					glyph={(d, i) => {
-						return (
-							<g key={`line-point-${i}`}>
-								<GlyphDot>
-								  <text
-								   x={xScale(x(d))}
-								   y={yScale(y(d))}
-								   dx={10}
-								   fill={"white"}
-								   stroke={"black"}
-								   strokeWidth={1}
-								   fontSize={11}
-								  >
-								   {data[i].temp}
-								  </text>
-								</GlyphDot>
-								<GlyphDot
-								  cx={xScale(x(d))}
-								  cy={yScale(y(d))}
-								  r={4}
-								  fill='red'
-								/>
-							</g>
-						);
+						return (glyphDot(d, i));
 					}}
 				/>
 			</Group>
