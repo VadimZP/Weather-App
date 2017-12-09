@@ -8,7 +8,7 @@ let [compose, map, curry, prop, head, take, path] =
     [R.compose, R.map, R.curry, R.prop, R.head, R.take, R.path];
 
 
-/** This function retrieves data for showing weather */
+/** This function retrieves data to show weather */
 
 function sortData() {
 
@@ -21,11 +21,14 @@ function sortData() {
     const date = map(compose(prop('data'), head))(days);
 
 
-    /** To retrieve weekday name we need to covert Date obj to string */
+    /** 
+     * To retrieve weekday name we need to covert Date obj to string 
+     * @param {string} str - data string YY-MM-DDDD.
+     * */
 
-    const convertToString = (el) => {
+    const convertToString = (str) => {
 
-        let d = new Date(...el.split(','));
+        let d = new Date(...str.split(','));
 
         d.setDate(d.getDate());
 
@@ -58,11 +61,16 @@ function sortData() {
         ), days
     ); 
 
+
+     /**
+      * Function for getting the value with the most occurrences in a list.
+      * @param {array} arr - array of values.
+      * */
+
     function commonVal(arr) {
         const sorted = arr.sort();
 
         let obj = {};
-
         let tempArray = [];
 
         sorted.forEach((val, i, arr) => {
@@ -76,7 +84,6 @@ function sortData() {
         });
 
         const numsArr = Object.keys(obj).map(el => +el);
-
         const getCommon = obj[Math.max(...numsArr)][0];
 
         return getCommon;
