@@ -18,8 +18,8 @@ const Graph = props => {
 	/**
 	  * Extract temperature and time properties from day array objects,
 	  * then put these data in object.
-      * @param {array} day - array of day's weather for each 3 hour.
-      * */
+          * @param {array} day - array of day's weather for each 3 hour.
+      	  * */
 
 	const getHoursAndTemperature = (day) => {
 
