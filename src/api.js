@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import axios from 'axios';
 
 import DaysList from './DaysList';
@@ -7,9 +7,10 @@ import Graph from './Graph';
 const R = require('ramda');
 const Future = require('fluture');
 
-let [compose, filter, map, concat, merge, length, prop, propEq, drop, head] = 
+
+let [compose, filter, concat, merge, length, prop, propEq, drop, head] = 
     
-    [R.compose, R.filter, R.map, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
+    [R.compose, R.filter, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
 
 export default class FetchData extends React.PureComponent {
     constructor(props) {
@@ -90,10 +91,10 @@ export default class FetchData extends React.PureComponent {
 
 render() {
     return ( 
-        <div>
+        <Fragment>
             <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
             <DaysList days={this.state.data} onClick={this.handleClick}/>
-        </div>
+        </Fragment>
         );
     }
 }

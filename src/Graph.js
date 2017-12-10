@@ -2,11 +2,10 @@ import React from 'react';
 import { Group } from '@vx/group';
 import { GlyphDot } from '@vx/glyph';
 import { LinePath } from '@vx/shape';
-import { genDateValue } from '@vx/mock-data';
 import { scaleTime, scaleLinear } from '@vx/scale';
-import { curveBasis, curveMonotoneX } from '@vx/curve';
+import { curveMonotoneX } from '@vx/curve';
 import { LinearGradient } from '@vx/gradient';
-import { extent, max, min } from 'd3-array';
+import { extent, max, min} from 'd3-array';
 
 const Graph = props => {
 
@@ -26,19 +25,17 @@ const Graph = props => {
 		const createObj = (obj) => {
 			let hours = +obj.time.slice(0, 2);
 
-			return { date: hours, temp: obj.main.temp }
+			return { time: hours, temp: obj.main.temp };
 		}
 
-		return day.map(createObj)
+		return day.map(createObj);
 	}
 
 	const data = getHoursAndTemperature(props.day);
 
-
-
 	/** Graph config  */
 
-	const x = d => d.date;
+	const x = d => d.time;
 	const y = d => d.temp;
 
 	const width = 1200;
@@ -50,17 +47,18 @@ const Graph = props => {
 		right: 80,
 	};
 
-	const xMax = width - margin.left - margin.right;
-	const yMax = height - margin.top - margin.bottom;
+	const xMax = width - 30;
+	const yMax = height - margin.top - margin.bottom ;
 
 	const xScale = scaleTime({
 		range: [0, xMax],
 		domain: extent(data, x),
 	});
+	
 
 	const yScale = scaleLinear({
 		range: [yMax, 0],
-		domain: [0, max(data, y)],
+		domain: [min(data, y), max(data, y)],
 		nice: true,
 	});
 
@@ -75,8 +73,9 @@ const Graph = props => {
 					stroke={"black"}
 					strokeWidth={1}
 					fontSize={11}
+					style={{display:'block', backgroundColor:'red'}}
 				>
-					{data[i].temp}
+					{`${data[i].temp} °C`}
 				</text>
 			</GlyphDot>
 			<GlyphDot

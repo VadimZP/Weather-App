@@ -4,9 +4,7 @@ import ReactDOM from 'react-dom';
 import FetchData from './api';
 
 ReactDOM.render(
-    <div>
-        <FetchData/>
-    </div>,
+        <FetchData/>,
     document.getElementById('root')
 );
 
