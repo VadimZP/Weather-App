@@ -22,10 +22,10 @@ ul {
 
   justify-content: space-around;
 }
-
+/* 
 li {
   max-width: 300px;
-}
+} */
 
 .card {
   width: 10%;
@@ -63,4 +63,26 @@ li {
 
 .media-content p {
   font-size: 0.9rem;
+}
+
+
+.search-form {
+  margin-top: 100px;
+}
+
+.form-group {
+  position: relative;
+  width: 500px;
+  margin: auto;
+  display: flex;
+}
+
+.list-group {
+  width: inherit;
+  position: absolute;
+  z-index: 10;
+}
+
+.form-control {
+  margin-right: 20px;
 }
