@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import axios from 'axios';
 
 import DaysListContainer from './DaysList';
@@ -34,7 +34,7 @@ const SearchForm = () => {
                     listGroup.append(liElem) : listGroup.insertAfter(input).append(liElem) 
         })) 
 
-} */
+    } */
 
 }
 
@@ -43,10 +43,12 @@ export default class FetchData extends React.PureComponent {
         super(props);
         this.state = {
             data: [],
-            day: 0
+            day: 0,
+            city: this.props.city
         };
 
         this.handleClick = this.handleClick.bind(this);
+        this.weatherAjaxRequest = this.weatherAjaxRequest.bind(this)
     }
 
     handleClick(childId) {
@@ -55,65 +57,80 @@ export default class FetchData extends React.PureComponent {
         })
     }
 
-
-    componentDidMount() {
-
-        /** 
+    weatherAjaxRequest(city) {
+           /** 
                    We are getting unsized array.
                    [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
         */
 
         const getData = Future.encaseP(axios.get);
-
-        const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${this.props.city}&units=metric&APPID=589954fc426476988cc0be8d6ed03349`)
-            .map(res => res.data.list.map(obj => (
-                {...obj, 
-                    data: obj.dt_txt.split(' ')[0],
-                    time: obj.dt_txt.split(' ')[1]
+        
+                const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=589954fc426476988cc0be8d6ed03349`)
+                    .map(res => res.data.list.map(obj => {
+                        console.log(res);
+                       return {...obj, 
+                            data: obj.dt_txt.split(' ')[0],
+                            time: obj.dt_txt.split(' ')[1]
+                        }
+            }))
+        
+        
+                /**
+                * This function distributes not sorted weather API data by days.
+                * @param {array} arr - array for grouping data.
+                * @param {react method} setState - pass structured data to react component's state.
+                * @param {array} res - data from API.
+                */
+                
+                const sortByDaysFunc = (arr, setState, res) => {
+        
+                    'use strict';
+        
+                    const getDay = compose(propEq('data'), prop('data'), head);
+        
+                    const getRelativeToDayData = filter(getDay(res));
+        
+                    const groupedData = concat(arr, [getRelativeToDayData(res)]);
+        
+                    const relativeDataLen = length(getRelativeToDayData(res));
+        
+                    const removeFromRes = compose(drop(relativeDataLen));
+        
+                    const resWithoutCurrentDay = removeFromRes(res);
+        
+                    resWithoutCurrentDay.length
+                        ? sortByDaysFunc(groupedData, this.setState.bind(this), resWithoutCurrentDay)
+                        : setState({ data: groupedData });
                 }
-            )))
+        
+                usizedList.fork(
+                    console.error, 
+                    R.curry(sortByDaysFunc)([], this.setState.bind(this))
+                );
+        
+                  /** 
+                            In the end we have a sorted array with six day-objects.
+                            They have have info about weather for every 3 hour (0:00, 3:00, 6:00 ...).
+        
+                            [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
+                  */
+    }
 
-
-        /**
-        * This function distributes not sorted weather API data by days.
-        * @param {array} arr - array for grouping data.
-        * @param {react method} setState - pass structured data to react component's state.
-        * @param {array} res - data from API.
-        */
-
-        const sortByDaysFunc = (arr, setState, res) => {
-
-            'use strict';
-
-            const getDay = compose(propEq('data'), prop('data'), head);
-
-            const getRelativeToDayData = filter(getDay(res));
-
-            const groupedData = concat(arr, [getRelativeToDayData(res)]);
-
-            const relativeDataLen = length(getRelativeToDayData(res));
-
-            const removeFromRes = compose(drop(relativeDataLen));
-
-            const resWithoutCurrentDay = removeFromRes(res);
-
-            resWithoutCurrentDay.length
-                ? sortByDaysFunc(groupedData, this.setState.bind(this), resWithoutCurrentDay)
-                : setState({ data: groupedData });
-        }
-
-        usizedList.fork(
-            console.error, 
-            R.curry(sortByDaysFunc)([], this.setState.bind(this))
-        );
-
-          /** 
-                    In the end we have a sorted array with six day-objects.
-                    They have have info about weather for every 3 hour (0:00, 3:00, 6:00 ...).
-
-                    [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
-          */
-}
+    componentWillReceiveProps(nextProps) {
+        console.log(this.state.city, nextProps.city);
+        if(this.state.city !== nextProps.city) {
+            this.setState({city: nextProps.city})
+                this.weatherAjaxRequest(nextProps.city)
+                return true
+            } else {
+                return false
+            } 
+ 
+    } 
+ 
+    componentDidMount() {
+        this.weatherAjaxRequest(this.state.city)
+    }
 
 render() {
     return ( 

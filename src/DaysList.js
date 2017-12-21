@@ -12,8 +12,6 @@ let [compose, map, curry, prop, head, take, path] =
 
 function DaysList(props) {
 
-/*     const dayItemsArr = 
-    console.log(dayItemsArr); */
     return (
         <ul>{
             props.days.map((item, i) =>
