@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react';
-import axios from 'axios';
-
 import DaysListContainer from './DaysList';
 import Graph from './Graph';
+
+import axios from 'axios';
 
 const $ = window.$;
 
@@ -14,29 +14,11 @@ let [compose, filter, concat, merge, length, prop, propEq, drop, head] =
     [R.compose, R.filter, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
 
 
-const SearchForm = () => {
+// const SearchForm = () => {
 
- /*    const autocomplete = () => {
-        let listGroup = $("<ul></ul>").addClass("list-group");
-        let findListGroup = $('ul.list-group');
+        
 
-        if(!input.length ) {
-            findListGroup.remove()
-        } 
-
-        axios
-            .get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input.value}&language=en&sensor=false&types=(cities)&key=AIzaSyBcfMe4GBiDBR3-Xe4g0_ikJtENnQhNE8Y`)
-            .then(res => res.data.predictions.map(city => {
-            
-                let liElem = $(`<li class='list-group-item'>${city.description}</li>`)
-
-                $.contains( $('.form-group')[0], $('ul.list-group')[0] ) ?  
-                    listGroup.append(liElem) : listGroup.insertAfter(input).append(liElem) 
-        })) 
-
-    } */
-
-}
+// }
 
 export default class FetchData extends React.PureComponent {
     constructor(props) {
@@ -52,28 +34,25 @@ export default class FetchData extends React.PureComponent {
     }
 
     handleClick(childId) {
-        this.setState({
-            day: childId
-        })
+        this.setState({day: childId})
     }
 
     weatherAjaxRequest(city) {
-           /** 
-                   We are getting unsized array.
-                   [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
+        /** 
+            We are getting unsized array.
+            [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
         */
 
         const getData = Future.encaseP(axios.get);
         
-                const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=589954fc426476988cc0be8d6ed03349`)
+                const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=b0982525d17583189a85452554eb7afe`)
                     .map(res => res.data.list.map(obj => {
-                        console.log(res);
+                       console.log(res);
                        return {...obj, 
                             data: obj.dt_txt.split(' ')[0],
                             time: obj.dt_txt.split(' ')[1]
                         }
             }))
-        
         
                 /**
                 * This function distributes not sorted weather API data by days.
@@ -117,15 +96,13 @@ export default class FetchData extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(this.state.city, nextProps.city);
-        if(this.state.city !== nextProps.city) {
-            this.setState({city: nextProps.city})
+        if (this.state.city !== nextProps.city) {
+                this.setState({city: nextProps.city})
                 this.weatherAjaxRequest(nextProps.city)
                 return true
             } else {
                 return false
             } 
- 
     } 
  
     componentDidMount() {
@@ -137,6 +114,7 @@ render() {
         <Fragment>
             <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
             <DaysListContainer days={this.state.data} onClick={this.handleClick}/>
+            <iframe width='100%' src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${this.state.city}`}></iframe>
         </Fragment>
         );
     }

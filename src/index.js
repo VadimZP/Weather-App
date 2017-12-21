@@ -1,16 +1,42 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 import axios from 'axios';
+
 import FetchData from './api';
 
+const $ = window.$;
 
 class SearchForm extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {city: 'london'}
+        this.state = {city: null}
+        this.autocomplete = this.autocomplete.bind(this)
     }
+
+    autocomplete(input){
+        let cityDiv = $(`<div class='city-autocomplete'></div>`);
+        let cityDivInDOM = $('.city-autocomplete');
+
+        axios
+            .get(`https://api.teleport.org/api/cities/?search=${input.value}&limit=1`)
+            .then(res => res.data._embedded['city:search-results'].map(city => {
+
+                let placeName = city.matching_full_name.split(',')[0].replace(/City/g, '');
+
+                cityDiv.text(`${placeName}`);
+
+                return placeName
+            }))
+            .then((placeName) => {
+                $('.search-form').find(cityDivInDOM)[0] !== undefined 
+                ? cityDivInDOM.text(`${placeName[0]}`)
+                : cityDiv.insertAfter($('.form-group'))
+            })
+            .then(() => !input.value.length &&  $('.city-autocomplete').remove() )
+
+    } 
 
     render() {
         return (
@@ -20,12 +46,10 @@ class SearchForm extends React.Component {
                         className="form-control" id="city_input"
                         placeholder="Enter city"
                         onChange={(e) => {
-                             this.setState({
-                                 city: e.target.value
-                             })
-                            }
-                         }
-                        // ref={input => console.log(input)}
+                            this.setState({city: e.target.value})
+                            this.autocomplete(e.target)
+                        }
+                    }
                     />
                     <button type='button' className="btn btn-primary" onClick={this.props.onClick.bind(null, this.state.city)}>Search</button>
                 </div>
@@ -60,7 +84,28 @@ class App extends React.Component {
     }
 
     getCityFromSearchInput(city) {
-        this.setState({ city });
+
+        function edit(val) {
+            let str = 
+            $.trim(val)
+                .toLowerCase()
+                .replace(/[0-9]/g, '')
+                .replace(/^[a-z\d,]*\-?[a-z\d,]*$ /g, '')
+                .replace(/\s+/g, ' ');
+
+            console.log(str);
+            return (
+                str === null || str === ''
+                    ? 'not valid' : str
+            )
+
+        }
+
+        const editedValue = edit(city);
+
+        if (editedValue === 'not valid') return;
+        
+        this.setState({ city: editedValue })  
     }
 
     render() {
