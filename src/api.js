@@ -14,12 +14,6 @@ let [compose, filter, concat, merge, length, prop, propEq, drop, head] =
     [R.compose, R.filter, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
 
 
-// const SearchForm = () => {
-
-        
-
-// }
-
 export default class FetchData extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -47,7 +41,6 @@ export default class FetchData extends React.PureComponent {
         
                 const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=b0982525d17583189a85452554eb7afe`)
                     .map(res => res.data.list.map(obj => {
-                       console.log(res);
                        return {...obj, 
                             data: obj.dt_txt.split(' ')[0],
                             time: obj.dt_txt.split(' ')[1]
