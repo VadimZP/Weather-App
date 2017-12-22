@@ -3,7 +3,6 @@ svg {
   margin: 0 auto;
 }
 
-
 .active {
   font-weight: bold;
   color: red;
@@ -19,17 +18,21 @@ svg {
 
 ul {
   display: flex;
-
   justify-content: space-around;
+  margin: 0 auto 100px !important;
+  width: 1200px;
 }
-/* 
-li {
-  max-width: 300px;
-} */
+
+@media screen and (max-width: 1000px) {
+  ul {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto 100px !important;
+    width: 900px !important;
+  }
+}
 
 .card {
-  width: 10%;
-
   cursor: pointer;
 }
 
@@ -65,7 +68,6 @@ li {
   font-size: 0.9rem;
 }
 
-
 .search-form {
   margin-top: 100px;
 }
@@ -87,10 +89,17 @@ li {
   margin-right: 20px;
 }
 
+.city-autocomplete {
+  width: 200px;
+  margin: auto;
+}
+
 .hidden {
-  display: none;
+  visibility: hidden;
 }
 
 .active {
   color: red;
+}
+@media screen and (max-width: 1000px) {
 }
