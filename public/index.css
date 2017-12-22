@@ -86,3 +86,11 @@ li {
 .form-control {
   margin-right: 20px;
 }
+
+.hidden {
+  display: none;
+}
+
+.active {
+  color: red;
+}
