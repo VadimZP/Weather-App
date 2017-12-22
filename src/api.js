@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, { Fragment} from 'react';
 import DaysListContainer from './DaysList';
 import Graph from './Graph';
 
