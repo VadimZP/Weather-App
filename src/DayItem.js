@@ -21,8 +21,8 @@ export default class DayItem extends React.Component {
                     <div className="media">
                         <div className="media-content">
                             <p className="title is-4">{this.props.dayOfTheWeek}</p>
-                            <p>{this.props.date}</p>
-                            <p>{this.props.minTemp} {this.props.maxTemp}</p>
+                            <p><b>Data</b>: {this.props.date}</p>
+                            <p><b>Min</b>: {this.props.minTemp}°C <b>Max</b>: {this.props.maxTemp}°C</p>
                         </div>
                     </div>
                 </div>

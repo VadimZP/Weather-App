@@ -112,9 +112,9 @@ export default class FetchData extends React.PureComponent {
 render() {
     return ( 
         <Fragment>
+            <iframe className='map' width='100%' height='300' src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${this.state.city}`}></iframe>
             <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
             <DaysListContainer days={this.state.data} onClick={this.handleClick}/>
-            <iframe width='100%' src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${this.state.city}`}></iframe>
         </Fragment>
         );
     }
