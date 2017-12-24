@@ -16,23 +16,23 @@ export default class SearchForm extends React.Component {
     autocomplete(input) {
         let cityDivInDOM = $('.city-autocomplete');
 
-        if (cityDivInDOM.hasClass('hidden')) cityDivInDOM.removeClass('hidden');
+        cityDivInDOM.hasClass('hidden') && cityDivInDOM.removeClass('hidden');
 
         axios
             .get(`https://api.teleport.org/api/cities/?search=${input.value}&limit=1`)
             .then(res => res.data._embedded['city:search-results'].map(city => {
 
+                // Remove "City", for example New York City
                 let placeName = city.matching_full_name.split(',')[0].replace(/City/g, '');
+
                 cityDivInDOM.text(`${placeName}`);
 
-                return placeName
-            }))
-            .then((placeName) => {
                 placeName === 'undefined' && (placeName = ' ')
-
+                
                 cityDivInDOM.text(`${placeName}`)
-            })
-            .then(() => !input.value.length && cityDivInDOM.addClass('hidden'))
+                !input.value.length && cityDivInDOM.addClass('hidden')
+            }))
+            
 
     }
 

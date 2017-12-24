@@ -14,13 +14,15 @@ let [compose, filter, concat, merge, length, prop, propEq, drop, head] =
     [R.compose, R.filter, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
 
 
-export default class FetchData extends React.PureComponent {
+export default class FetchData extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
             day: 0,
-            city: this.props.city
+            city: this.props.city,
+            mapSrc: `https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${this.props.city}`,
+            errorMsg: false
         };
 
         this.handleClick = this.handleClick.bind(this);
@@ -29,6 +31,26 @@ export default class FetchData extends React.PureComponent {
 
     handleClick(childId) {
         this.setState({day: childId})
+    }
+
+
+
+    componentWillReceiveProps(nextProps) {
+        console.log(this.props.city);
+        if (this.state.city !== nextProps.city) {
+                let src =`https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${nextProps.city}`
+                this.setState({city: nextProps.city, mapSrc: src})
+                this.weatherAjaxRequest(nextProps.city)
+
+                return true
+            } else {
+                
+                return false
+            } 
+    } 
+ 
+    componentDidMount() {
+        this.weatherAjaxRequest(this.state.city)
     }
 
     weatherAjaxRequest(city) {
@@ -40,12 +62,12 @@ export default class FetchData extends React.PureComponent {
         const getData = Future.encaseP(axios.get);
         
                 const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=b0982525d17583189a85452554eb7afe`)
-                    .map(res => res.data.list.map(obj => {
-                       return {...obj, 
+                    .map(res => res.data.list.map(obj => (
+                       {...obj, 
                             data: obj.dt_txt.split(' ')[0],
                             time: obj.dt_txt.split(' ')[1]
-                        }
-            }))
+                       }
+                )))
         
                 /**
                 * This function distributes not sorted weather API data by days.
@@ -76,8 +98,11 @@ export default class FetchData extends React.PureComponent {
                 }
         
                 usizedList.fork(
-                    console.error, 
-                    R.curry(sortByDaysFunc)([], this.setState.bind(this))
+                    err => this.setState({errorMsg: true}), 
+                    (() => {
+                        this.setState({errorMsg: false})
+                        return R.curry(sortByDaysFunc)([], this.setState.bind(this))
+                    })()
                 );
         
                   /** 
@@ -88,27 +113,17 @@ export default class FetchData extends React.PureComponent {
                   */
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.state.city !== nextProps.city) {
-                this.setState({city: nextProps.city})
-                this.weatherAjaxRequest(nextProps.city)
-                return true
-            } else {
-                return false
-            } 
-    } 
- 
-    componentDidMount() {
-        this.weatherAjaxRequest(this.state.city)
-    }
+
 
 render() {
-    return ( 
-        <Fragment>
-            <iframe className='map' width='100%' height='300' src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${this.state.city}`}></iframe>
-            <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
-            <DaysListContainer days={this.state.data} onClick={this.handleClick}/>
-        </Fragment>
-        );
+    return (
+        this.state.errorMsg 
+            ? <h1 style={{textAlign: 'center'}}>There is no the city you are looking for in our database</h1>
+            : <Fragment>
+                <iframe className='map' width='100%' height='300' src={this.state.mapSrc}></iframe>
+                <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day}/>
+                <DaysListContainer days={this.state.data} onClick={this.handleClick}/>
+             </Fragment>
+        )
     }
 }
