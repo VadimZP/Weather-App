@@ -14,9 +14,9 @@ export default class SearchForm extends React.Component {
     }
 
     autocomplete(input) {
-        let cityDivInDOM = $('.city-autocomplete');
+        let cityDiv = $('.city-autocomplete');
 
-        cityDivInDOM.hasClass('hidden') && cityDivInDOM.removeClass('hidden');
+        cityDiv.hasClass('hidden') && cityDiv.removeClass('hidden');
 
         axios
             .get(`https://api.teleport.org/api/cities/?search=${input.value}&limit=1`)
@@ -25,15 +25,11 @@ export default class SearchForm extends React.Component {
                 // Remove "City", for example New York City
                 let placeName = city.matching_full_name.split(',')[0].replace(/City/g, '');
 
-                cityDivInDOM.text(`${placeName}`);
-
                 placeName === 'undefined' && (placeName = ' ')
                 
-                cityDivInDOM.text(`${placeName}`)
-                !input.value.length && cityDivInDOM.addClass('hidden')
+                cityDiv.text(`${placeName}`)
+                !input.value.length && cityDiv.addClass('hidden')
             }))
-            
-
     }
 
     render() {
@@ -47,23 +43,21 @@ export default class SearchForm extends React.Component {
                         onChange={(e) => {
                             this.setState({ city: e.target.value })
                             this.autocomplete(e.target)
-                            }
-                        }
+                        }}
                         onKeyDown={(e) => {
-                            if (e.keyCode === 13 && $('.city-autocomplete').hasClass('active')) {
-                                this.setState({ city: $('.city-autocomplete').text() })
-                                e.target.value = $('.city-autocomplete').text();
-                                $('.city-autocomplete').removeClass('active')
-                                $('.city-autocomplete').addClass('hidden')
+                            let cityDiv = $('.city-autocomplete')
+
+                            if (e.keyCode === 13 && cityDiv.hasClass('active')) {
+                                this.setState({ city: cityDiv.text() })
+                                e.target.value = cityDiv.text();
+
+                                cityDiv.removeClass('active')
+                                cityDiv.addClass('hidden')
                             }
-                            if (e.keyCode === 38) {
-                                $('.city-autocomplete').removeClass('active')
-                            }
-                            if (e.keyCode === 40) { $('.city-autocomplete').addClass('active') } else {
-                                $('.city-autocomplete').removeClass('active')
-                            }
-                        }
-                        }
+
+                            e.keyCode === 38 && cityDiv.removeClass('active')
+                            e.keyCode === 40 ? cityDiv.addClass('active') : cityDiv.removeClass('active')
+                        }}
                     />
                     <input type='submit'
                         className="btn btn-primary"

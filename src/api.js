@@ -14,7 +14,7 @@ let [compose, filter, concat, merge, length, prop, propEq, drop, head] =
     [R.compose, R.filter, R.concat, R.merge, R.length, R.prop, R.propEq, R.drop, R.head];
 
 
-export default class FetchData extends React.Component {
+export default class FetchData extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,18 +33,13 @@ export default class FetchData extends React.Component {
         this.setState({day: childId})
     }
 
-
-
     componentWillReceiveProps(nextProps) {
-        console.log(this.props.city);
         if (this.state.city !== nextProps.city) {
                 let src =`https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${nextProps.city}`
                 this.setState({city: nextProps.city, mapSrc: src})
                 this.weatherAjaxRequest(nextProps.city)
-
                 return true
             } else {
-                
                 return false
             } 
     } 
@@ -112,8 +107,6 @@ export default class FetchData extends React.Component {
                             [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
                   */
     }
-
-
 
 render() {
     return (
