@@ -1,74 +1,84 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import axios from 'axios';
 
-const $ = window.$;
+const { $ } = window;
 
 export default class SearchForm extends React.Component {
-    constructor(props) {
-        super(props);
+    static autocomplete(input) {
+        const cityDiv = $('.city-autocomplete');
 
-        this.state = { city: null }
-        this.autocomplete = this.autocomplete.bind(this)
-    }
-
-    autocomplete(input) {
-        let cityDiv = $('.city-autocomplete');
-
-        cityDiv.hasClass('hidden') && cityDiv.removeClass('hidden');
+        if (cityDiv.hasClass('hidden')) cityDiv.removeClass('hidden');
 
         axios
             .get(`https://api.teleport.org/api/cities/?search=${input.value}&limit=1`)
-            .then(res => res.data._embedded['city:search-results'].map(city => {
-
-                // Remove "City", for example New York City
+            .then(res => res.data._embedded['city:search-results'].map((city) => {
+                // Remove "City" word from autocomplete cities, for example New York City
                 let placeName = city.matching_full_name.split(',')[0].replace(/City/g, '');
 
-                placeName === 'undefined' && (placeName = ' ')
-                
-                cityDiv.text(`${placeName}`)
-                !input.value.length && cityDiv.addClass('hidden')
-            }))
+                if (placeName === 'undefined') (placeName = ' ');
+
+                cityDiv.text(`${placeName}`);
+
+                if (!input.value.length) cityDiv.addClass('hidden');
+
+                return placeName;
+            }));
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            city: null,
+        };
     }
 
     render() {
         return (
             <form className="search-form">
                 <div className="form-group">
-                    <input type="text"
-                        className="form-control" id="city_input"
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="city_input"
                         placeholder="Enter city"
                         autoComplete="off"
                         onChange={(e) => {
-                            this.setState({ city: e.target.value })
-                            this.autocomplete(e.target)
+                            this.setState({ city: e.target.value });
+                            SearchForm.autocomplete(e.target);
                         }}
                         onKeyDown={(e) => {
-                            let cityDiv = $('.city-autocomplete')
+                            const cityDiv = $('.city-autocomplete');
 
                             if (e.keyCode === 13 && cityDiv.hasClass('active')) {
-                                this.setState({ city: cityDiv.text() })
+                                this.setState({ city: cityDiv.text() });
                                 e.target.value = cityDiv.text();
 
-                                cityDiv.removeClass('active')
-                                cityDiv.addClass('hidden')
+                                cityDiv.removeClass('active');
+                                cityDiv.addClass('hidden');
                             }
 
-                            e.keyCode === 38 && cityDiv.removeClass('active')
-                            e.keyCode === 40 ? cityDiv.addClass('active') : cityDiv.removeClass('active')
+                            if (e.keyCode === 38) cityDiv.removeClass('active');
+                            if (e.keyCode === 40) {
+                                cityDiv.addClass('active');
+                            } else {
+                                cityDiv.removeClass('active');
+                            }
                         }}
                     />
-                    <input type='submit'
+                    <input
+                        type="submit"
                         className="btn btn-primary"
                         onClick={(e) => {
-                            e.preventDefault()
-                            this.props.onClick(this.state.city)
+                            e.preventDefault();
+                            this.props.onClick(this.state.city);
                         }}
-                        value='Search' />
+                        value="Search"
+                    />
                 </div>
-                <div className='city-autocomplete hidden'></div>
+                <div className="city-autocomplete hidden" />
             </form>
-        )
+        );
     }
 }

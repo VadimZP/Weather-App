@@ -1,34 +1,33 @@
 import React from 'react';
 import DayItem from './DayItem';
 
-const R = require('ramda');
+import { compose, map, curry, prop, head, take, path } from 'ramda';
 
-let [compose, map, curry, prop, head, take, path] = 
+// const [compose, map, curry, prop, head, take, path] =
 
-    [R.compose, R.map, R.curry, R.prop, R.head, R.take, R.path];
+//     [R.compose, R.map, R.curry, R.prop, R.head, R.take, R.path];
 
 
 /** This function retrieves data to show weather */
 
 function DaysList(props) {
-
     return (
         <ul>{
             props.days.map((item, i) =>
-            <DayItem
-                onClick={props.handleClick}
-                days={props.days[i]}
-                key={i}
-                id={i}
-                weatherImg={props.parentProps.getCommonWeather[i]}
-                date={props.parentProps.date[i]}
-                dayOfTheWeek={props.parentProps.weekDays[i]}
-                minTemp={props.parentProps.minTemprt[i]}
-                maxTemp={props.parentProps.maxTemprt[i]}
-            />)
+                (<DayItem
+                    onClick={props.handleClick}
+                    days={props.days[i]}
+                    key={i}
+                    id={i}
+                    weatherImg={props.parentProps.getCommonWeather[i]}
+                    date={props.parentProps.date[i]}
+                    dayOfTheWeek={props.parentProps.weekDays[i]}
+                    minTemp={props.parentProps.minTemprt[i]}
+                    maxTemp={props.parentProps.maxTemprt[i]}
+                />))
         }
         </ul>
-    )
+    );
 }
 
 class DaysListContainer extends React.Component {
@@ -37,11 +36,10 @@ class DaysListContainer extends React.Component {
 
         this.handleClick = this.props.onClick;
 
-        this.state = {}
+        this.state = {};
     }
 
     sort() {
-
         const days = this.props.days;
 
         /** Get YYYY-MM-DD from every day */
@@ -49,19 +47,18 @@ class DaysListContainer extends React.Component {
         const date = map(compose(prop('data'), head))(days);
 
 
-        /** 
-         * To retrieve weekday name we need to covert Date obj to string 
+        /**
+         * To retrieve weekday name we need to covert Date obj to string
          * @param {string} str - data string YY-MM-DDDD.
          * */
 
         const convertToString = (str) => {
-
-            let d = new Date(...str.split(','));
+            const d = new Date(...str.split(','));
 
             d.setDate(d.getDate());
 
             return d.toDateString();
-        }
+        };
 
         const weekDays = map(compose(take(3), convertToString), date);
 
@@ -83,11 +80,7 @@ class DaysListContainer extends React.Component {
 
         /** Get image of common weather during the day */
 
-        const weatherImgs = map(
-            compose(
-                map(prop('icon')), map(head), map(prop('weather'))
-            ), days
-        );
+        const weatherImgs = map(compose(map(prop('icon')), map(head), map(prop('weather'))), days);
 
 
         /**
@@ -98,7 +91,7 @@ class DaysListContainer extends React.Component {
         function commonVal(arr) {
             const sorted = arr.sort();
 
-            let obj = {};
+            const obj = {};
             let tempArray = [];
 
             sorted.forEach((val, i, arr) => {
@@ -119,24 +112,22 @@ class DaysListContainer extends React.Component {
 
         const getCommonWeather = map(arr => commonVal(arr), weatherImgs);
 
-       
-        return  {
+
+        return {
             date,
             minTemprt,
             maxTemprt,
             getCommonWeather,
-            weekDays
-        }
-
+            weekDays,
+        };
     }
-    
+
     render() {
-        
-        return <DaysList 
+        return (<DaysList
             handleClick={this.handleClick}
             days={this.props.days}
             parentProps={this.sort()}
-        />
+        />);
     }
 }
 
