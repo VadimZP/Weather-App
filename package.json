@@ -1,5 +1,5 @@
 {
-  "name": "route-test",
+  "name": "weather-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,6 +14,7 @@
     "axios": "^0.16.2",
     "fluture": "^7.2.2",
     "prop-types": "^15.6.0",
+    "ramda": "^0.25.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
@@ -25,7 +26,10 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "ramda": "^0.25.0",
-    "ramda-fantasy": "^0.8.0"
+    "eslint": "^4.14.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1"
   }
 }
