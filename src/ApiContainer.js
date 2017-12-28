@@ -3,11 +3,11 @@ import axios from 'axios';
 import { curry, compose, filter, concat, length, prop, propEq, drop, head } from 'ramda';
 
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import DaysListContainer from './DaysList';
 import Graph from './Graph';
 
-
-export default class FetchData extends React.PureComponent {
+class ApiDataContainer extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,8 +29,11 @@ export default class FetchData extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
         if (this.state.city !== nextProps.city) {
             const src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${nextProps.city}`;
+
             this.setState({ city: nextProps.city, mapSrc: src });
+
             this.weatherAjaxRequest(nextProps.city);
+
             return true;
         }
         return false;
@@ -42,9 +45,10 @@ export default class FetchData extends React.PureComponent {
 
     weatherAjaxRequest(city) {
     /**
-            We are getting unsized array.
-            [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
-        */
+     * We are getting unsized array.
+     * [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
+     *
+     */
 
         const getData = Future.encaseP(axios.get);
 
@@ -58,11 +62,11 @@ export default class FetchData extends React.PureComponent {
             )));
 
         /**
-                * This function distributes not sorted weather API data by days.
-                * @param {array} arr - array for grouping data.
-                * @param {react method} setState - pass structured data to react component's state.
-                * @param {array} res - data from API.
-                */
+         * This function distributes not sorted weather API data by days.
+         * @param {array} arr - array for grouping data.
+         * @param {react method} setState - pass structured data to react component's state.
+         * @param {array} res - data from API.
+         */
 
         const sortByDaysFunc = (arr, setState, res) => {
             const getDay = compose(propEq('data'), prop('data'), head);
@@ -83,7 +87,9 @@ export default class FetchData extends React.PureComponent {
         };
 
         usizedList.fork(
+            // reject
             () => this.setState({ errorMsg: true }),
+            // resolve
             (() => {
                 this.setState({ errorMsg: false });
                 return curry(sortByDaysFunc)([], this.setState.bind(this));
@@ -91,22 +97,42 @@ export default class FetchData extends React.PureComponent {
         );
 
     /**
-                            In the end we have a sorted array with six day-objects.
-                            They have have info about weather
-                            for every 3 hour (0:00, 3:00, 6:00 ...).
-
-                            [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
-                  */
+     * In the end we have a sorted array with six day-objects.
+     * They have have info about weather
+     * for every 3 hour (0:00, 3:00, 6:00 ...).
+     *
+     * [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
+     */
     }
 
     render() {
+        if (this.state.errorMsg) {
+            return (
+                <h1 style={{ textAlign: 'center' }}>There is no the city you are looking for in our database</h1>
+            );
+        }
         return (
-            this.state.errorMsg ? <h1 style={{ textAlign: 'center' }}>There is no the city you are looking for in our database</h1> :
-                <Fragment>
-                <iframe className="map" width="100%" height="300" src={this.state.mapSrc} />
+            <Fragment>
+                <iframe
+                    className="map"
+                    title="map"
+                    width="100%"
+                    height="300"
+                    tabIndex="-1"
+                    src={this.state.mapSrc}
+                />
                 <Graph day={this.state.day === 0 ? this.state.data[0] : this.state.day} />
-                <DaysListContainer days={this.state.data} onClick={this.handleClick} />
+                <DaysListContainer
+                    days={this.state.data}
+                    onClick={this.handleClick}
+                />
             </Fragment>
         );
     }
 }
+
+ApiDataContainer.propTypes = {
+    city: PropTypes.string,
+};
+
+export default ApiDataContainer;

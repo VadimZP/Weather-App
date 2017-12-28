@@ -1,18 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import axios from 'axios';
 
 const { $ } = window;
 
-export default class SearchForm extends React.Component {
+class SearchForm extends React.Component {
     static autocomplete(input) {
         const cityDiv = $('.city-autocomplete');
 
         if (cityDiv.hasClass('hidden')) cityDiv.removeClass('hidden');
 
-        axios
-            .get(`https://api.teleport.org/api/cities/?search=${input.value}&limit=1`)
+        /**
+         * Teleport API provides city autocomplete JSON object.
+         * @param {number} &limit - get only one variant of the city to autcomplete.
+         *
+         * Example:
+         *  {
+         *    matching_alternate_names: (2) [{…}, {…}]
+         *    matching_full_name: "Lviv, Lviv, Ukraine"
+         *  }
+         * */
+        axios.get(`https://api.teleport.org/api/cities/?search=${input.value}&limit=1`)
+
             .then(res => res.data._embedded['city:search-results'].map((city) => {
+                console.log(city);
                 // Remove "City" word from autocomplete cities, for example New York City
                 let placeName = city.matching_full_name.split(',')[0].replace(/City/g, '');
 
@@ -32,6 +44,30 @@ export default class SearchForm extends React.Component {
         this.state = {
             city: null,
         };
+
+        this.keyEvents = this.keyEvents.bind(this);
+    }
+
+    keyEvents(e) {
+        const cityDiv = $('.city-autocomplete');
+
+        // 'Enter' key
+        if (e.keyCode === 13 && cityDiv.hasClass('active')) {
+            this.setState({ city: cityDiv.text() });
+            e.target.value = cityDiv.text();
+
+            cityDiv.removeClass('active');
+            cityDiv.addClass('hidden');
+        }
+        // 'Arrow up' key
+        if (e.keyCode === 38) cityDiv.removeClass('active');
+
+        // 'Arrow down' key
+        if (e.keyCode === 40) {
+            cityDiv.addClass('active');
+        } else {
+            cityDiv.removeClass('active');
+        }
     }
 
     render() {
@@ -48,24 +84,7 @@ export default class SearchForm extends React.Component {
                             this.setState({ city: e.target.value });
                             SearchForm.autocomplete(e.target);
                         }}
-                        onKeyDown={(e) => {
-                            const cityDiv = $('.city-autocomplete');
-
-                            if (e.keyCode === 13 && cityDiv.hasClass('active')) {
-                                this.setState({ city: cityDiv.text() });
-                                e.target.value = cityDiv.text();
-
-                                cityDiv.removeClass('active');
-                                cityDiv.addClass('hidden');
-                            }
-
-                            if (e.keyCode === 38) cityDiv.removeClass('active');
-                            if (e.keyCode === 40) {
-                                cityDiv.addClass('active');
-                            } else {
-                                cityDiv.removeClass('active');
-                            }
-                        }}
+                        onKeyDown={e => this.keyEvents(e)}
                     />
                     <input
                         type="submit"
@@ -82,3 +101,9 @@ export default class SearchForm extends React.Component {
         );
     }
 }
+
+SearchForm.propTypes = {
+    onClick: PropTypes.func,
+};
+
+export default SearchForm;

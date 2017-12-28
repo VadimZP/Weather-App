@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
-import FetchData from './api';
+import ApiDataContainer from './ApiContainer';
 import SearchForm from './SearchForm';
 
 const { $ } = window;
@@ -18,15 +18,14 @@ class App extends React.Component {
     getCityFromSearchInput(city) {
         function edit(val) {
             const str =
-            $.trim(val)
-                .toLowerCase()
-                .replace(/[0-9]/g, '')
-                .replace(/^[a-z\d,]*-?[a-z\d,]*$ /g, '')
-                .replace(/\s+/g, ' ');
+                $.trim(val)
+                    .toLowerCase()
+                    .replace(/[0-9]/g, '')
+                    .replace(/^[a-z\d,]*-?[a-z\d,]*$ /g, '')
+                    .replace(/\s+/g, ' ');
 
             return (
-                str === null || str === ''
-                    ? 'not valid' : str
+                (str === null || str === '') ? 'not valid' : str
             );
         }
 
@@ -44,7 +43,7 @@ class App extends React.Component {
             isValidCity ?
                 <Fragment>
                     <SearchForm onClick={this.getCityFromSearchInput} />
-                    <FetchData city={this.state.city} />
+                    <ApiDataContainer city={this.state.city} />
                 </Fragment>
                 :
                 <SearchForm onClick={this.getCityFromSearchInput} />
