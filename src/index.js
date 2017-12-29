@@ -1,18 +1,18 @@
-import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Fragment } from 'react'
+import ReactDOM from 'react-dom'
 
-import ApiDataContainer from './ApiContainer';
-import SearchForm from './SearchForm';
+import ApiDataContainer from './components/services/ApiDataContainer'
+import SearchFormView from './components/SearchForm/SearchFormView'
 
-const { $ } = window;
+const { $ } = window
 
 class App extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
 
-        this.state = { city: null };
+        this.state = { city: null }
 
-        this.getCityFromSearchInput = this.getCityFromSearchInput.bind(this);
+        this.getCityFromSearchInput = this.getCityFromSearchInput.bind(this)
     }
 
     getCityFromSearchInput(city) {
@@ -22,36 +22,36 @@ class App extends React.Component {
                     .toLowerCase()
                     .replace(/[0-9]/g, '')
                     .replace(/^[a-z\d,]*-?[a-z\d,]*$ /g, '')
-                    .replace(/\s+/g, ' ');
+                    .replace(/\s+/g, ' ')
 
             return (
                 (str === null || str === '') ? 'not valid' : str
-            );
+            )
         }
 
-        const editedValue = edit(city);
+        const editedValue = edit(city)
 
-        if (editedValue === 'not valid') return;
+        if (editedValue === 'not valid') return
 
-        this.setState({ city: editedValue });
+        this.setState({ city: editedValue })
     }
 
     render() {
-        const isValidCity = this.state.city !== null;
+        const isValidCity = this.state.city !== null
 
         return (
             isValidCity ?
                 <Fragment>
-                    <SearchForm onClick={this.getCityFromSearchInput} />
+                    <SearchFormView onClick={this.getCityFromSearchInput} />
                     <ApiDataContainer city={this.state.city} />
                 </Fragment>
                 :
-                <SearchForm onClick={this.getCityFromSearchInput} />
-        );
+                <SearchFormView onClick={this.getCityFromSearchInput} />
+        )
     }
 }
 
 ReactDOM.render(
     <App />,
     document.getElementById('root'),
-);
+)
