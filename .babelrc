@@ -1,5 +1,0 @@
-//* We need this config to use Jest with ES2015  */
-
-{
-    "presets": ["es2015", "react"]
-}
