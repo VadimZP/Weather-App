@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Return GraphView 1`] = `
+<svg
+  height={400}
+  style={
+    Object {
+      "borderBottom": "1px solid #000",
+    }
+  }
+  width={1200}
+>
+  <defs>
+    <linearGradient
+      gradientTransform={undefined}
+      id="gradient"
+      x1="0"
+      x2="0"
+      y1="0"
+      y2="1"
+    >
+      <stop
+        offset="0%"
+        stopColor="#CBC8EF"
+        stopOpacity={1}
+      />
+      <stop
+        offset="100%"
+        stopColor="#EFEEFC"
+        stopOpacity={1}
+      />
+    </linearGradient>
+  </defs>
+  <rect
+    fill="url(#gradient)"
+    height={400}
+    stroke="#f1f1f1"
+    width={1200}
+    x={0}
+    y={0}
+  />
+  <g
+    className="cx-group"
+    transform="translate(0, 0)"
+  >
+    <g>
+      <path
+        className="vx-linepath"
+        d="MNaN,NaNLNaN,NaN"
+        fill="none"
+        stroke="#7e20dc"
+        strokeDasharray=""
+        strokeDashoffset={0}
+        strokeWidth={2}
+      />
+      <g
+        className="vx-linepath-glyphs"
+      />
+    </g>
+  </g>
+</svg>
+`;
