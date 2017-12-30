@@ -16,7 +16,7 @@ export default class SearchFormView extends React.Component {
         if (cityDiv.hasClass('hidden')) cityDiv.removeClass('hidden')
 
         /**
-         * Teleport API provides city autocomplete JSON object.
+         * Teleport API provides cities' names JSON object.
          * @param {number} &limit - get only one variant of the city to autcomplete.
          *
          * Example:

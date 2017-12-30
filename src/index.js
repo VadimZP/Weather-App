@@ -7,15 +7,14 @@ import SearchFormView from './components/SearchForm/SearchFormView'
 const { $ } = window
 
 class App extends React.Component {
-    constructor(props) {
-        super(props)
+    state = { city: null }
 
-        this.state = { city: null }
+    retrieveCityFromSearchInput = (city) => {
+        /**
+         * Remove not valid symbols.
+         * @param {string} val - сity name.
+         * */
 
-        this.getCityFromSearchInput = this.getCityFromSearchInput.bind(this)
-    }
-
-    getCityFromSearchInput(city) {
         function edit(val) {
             const str =
                 $.trim(val)
@@ -42,11 +41,11 @@ class App extends React.Component {
         return (
             isValidCity ?
                 <Fragment>
-                    <SearchFormView onClick={this.getCityFromSearchInput} />
+                    <SearchFormView onClick={this.retrieveCityFromSearchInput} />
                     <ApiDataContainer city={this.state.city} />
                 </Fragment>
                 :
-                <SearchFormView onClick={this.getCityFromSearchInput} />
+                <SearchFormView onClick={this.retrieveCityFromSearchInput} />
         )
     }
 }

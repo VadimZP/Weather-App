@@ -6,24 +6,24 @@ import DayItemView from './components/DayItem/DayItemView'
 DaysListView.propTypes = {
     sorted: PropTypes.object,
     days: PropTypes.arrayOf(PropTypes.array),
-    handleClick: PropTypes.func,
+    DayItemClick: PropTypes.func,
 }
 
-export default function DaysListView(props) {
+export default function DaysListView({ DayItemClick, days, sorted }) {
     /** This check we use for a jest testing cause async props are undefined */
 
-    const DayItemsArr = props.days ? props.days.map((item, i) =>
+    const DayItemsArr = days ? days.map((item, i) =>
 
         (<DayItemView
-            onClick={props.handleClick}
-            days={props.days[i]}
+            getWeather={DayItemClick}
+            days={days[i]}
             id={i}
-            key={props.sorted.id[i]}
-            weatherImg={props.sorted.getCommonWeather[i]}
-            date={props.sorted.date[i]}
-            dayOfTheWeek={props.sorted.weekDays[i]}
-            minTemp={props.sorted.minTemprt[i]}
-            maxTemp={props.sorted.maxTemprt[i]}
+            key={sorted.ids[i]}
+            weatherImg={sorted.getCommonWeather[i]}
+            date={sorted.date[i]}
+            dayOfTheWeek={sorted.weekDays[i]}
+            minTemp={sorted.minTemprt[i]}
+            maxTemp={sorted.maxTemprt[i]}
         />)) : ''
 
     return (

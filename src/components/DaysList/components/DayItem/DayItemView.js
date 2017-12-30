@@ -9,7 +9,7 @@ DayItemView.propTypes = {
     maxTemp: PropTypes.number,
     weatherImg: PropTypes.string,
     id: PropTypes.number,
-    onClick: PropTypes.func,
+    getWeather: PropTypes.func,
 }
 
 export default function DayItemView(props) {
@@ -19,9 +19,9 @@ export default function DayItemView(props) {
             id={props.id}
             role="button"
             tabIndex="0"
-            onClick={() => props.onClick(props.days)}
-            onKeyDown={() => props.onClick(props.days)}
-            onFocus={() => props.onClick(props.days)}
+            onClick={() => props.getWeather(props.days)}
+            onKeyDown={() => props.getWeather(props.days)}
+            onFocus={() => props.getWeather(props.days)}
         >
             <div className="card-image">
                 <figure className="image is-4by3">

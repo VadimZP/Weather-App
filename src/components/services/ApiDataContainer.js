@@ -39,7 +39,13 @@ export default class ApiDataContainer extends React.PureComponent {
         return false
     }
 
-    handleClick = (childId) => {
+    /**
+    * Method that we send to the 'DayItemView' component
+    * for getting day weather array when component is clicked.
+    * @param {array} arr - array of values.
+    * */
+
+    DayItemClick = (childId) => {
         this.setState({ day: childId })
     }
 
@@ -98,7 +104,7 @@ export default class ApiDataContainer extends React.PureComponent {
 
     /**
      * In the end we have a sorted array with six day-objects.
-     * They have have info about weather
+     * They have have info about the weather
      * for every 3 hour (0:00, 3:00, 6:00 ...).
      *
      * [[{…}, {…}, {…}], [{…}, {…}, {…}], [{…}, {…}, {…}] ...]
@@ -128,7 +134,7 @@ export default class ApiDataContainer extends React.PureComponent {
                 />
                 <DaysListContainer
                     days={this.state.data}
-                    onClick={this.handleClick}
+                    DayItemClick={this.DayItemClick}
                 />
             </Fragment>
         )

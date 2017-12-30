@@ -11,28 +11,28 @@ GraphContainer.propTypes = {
     day: PropTypes.arrayOf(PropTypes.object),
 }
 
-export default function GraphContainer(props) {
+export default function GraphContainer({ day }) {
     /** Don't render if data wasn't fetched */
 
-    if (props.day === undefined) return null
+    if (day === undefined) return null
 
     /**
      * Extract temperature and time properties from day array objects,
      * then put these data in object.
-     * @param {array} day - array of day's weather for each 3 hour.
+     * @param {array} dayArr - array of day's weather for each 3 hour.
      * */
 
-    const getHoursAndTemperature = (day) => {
+    const getHoursAndTemperature = (dayArr) => {
         const createObj = (obj) => {
             const hours = +obj.time.slice(0, 2)
 
             return { time: hours, temp: obj.main.temp }
         }
 
-        return day.map(createObj)
+        return dayArr.map(createObj)
     }
 
-    const data = getHoursAndTemperature(props.day)
+    const data = getHoursAndTemperature(day)
 
     /** Graph config  */
 
