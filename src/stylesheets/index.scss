@@ -1,0 +1,131 @@
+html, body {
+  background-color: #EEF5F9;
+}
+svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.active {
+  font-weight: bold;
+  color: red;
+}
+
+.navbar-menu {
+  justify-content: center;
+}
+
+.navbar-menu .navbar-start {
+  margin-right: 0;
+}
+
+ul {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 auto 100px !important;
+  width: 1200px;
+}
+
+@media screen and (max-width: 1000px) {
+  ul {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto 100px !important;
+    width: 900px !important;
+  }
+}
+
+@media all and (max-width: 1280px) {
+  .card {
+    flex-grow: 1;
+  }
+}
+
+#override-bootstrap {
+  .card {
+    background-color: #fff;
+    border-radius: 0;
+    border: none;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.1), -1px 0 2px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .card:hover {
+    // box-shadow: 0 2px 17px rgba(10,10,10,0.1), 0 0 0 2px rgba(10,10,10,0.1);
+    transition: 0.5s;
+  }
+  .card-content {
+    padding: 0;
+    padding-bottom: 10px;
+  }
+  .card-image img {
+    margin: auto;
+  }
+}
+
+.media .media-content {
+  text-align: center;
+}
+
+.media-content p.title.is-4 {
+  font-size: 1rem;
+}
+
+.media-content p {
+  font-size: 0.9rem;
+}
+
+.search-form {
+  margin-top: 100px;
+}
+
+.form-group {
+  position: relative;
+  width: 500px;
+  margin: auto;
+  display: flex;
+}
+
+.list-group {
+  width: inherit;
+  position: absolute;
+  z-index: 10;
+}
+
+#override-bootstrap {
+  .form-control {
+    outline: none;
+    color: rgb(155, 155, 155);
+    margin-right: 20px;
+    border-radius: 0;
+    &::placeholder {
+      color: rgb(155, 155, 155);
+    }
+  }
+  
+  .btn-search {
+    outline: none;
+    background-color: #99424F;
+    border: #99424F;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(131, 37, 51);
+    }
+  }
+  
+} 
+
+
+.city-autocomplete {
+  width: 200px;
+  margin: auto;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.active {
+  color: red;
+}
+@media screen and (max-width: 1000px) {
+}
