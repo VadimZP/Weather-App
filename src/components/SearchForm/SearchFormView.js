@@ -92,7 +92,7 @@ export default class SearchFormView extends React.Component {
                     />
                     <input
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn btn-primary btn-search"
                         value="Search"
                         onClick={this.onClick}
                     />

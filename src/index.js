@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
+import './stylesheets/index.scss'
 
 import ApiDataContainer from './components/services/ApiDataContainer'
 import SearchFormView from './components/SearchForm/SearchFormView'
+
 
 const { $ } = window
 
