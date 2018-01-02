@@ -27,6 +27,6 @@ export default function DaysListView({ DayItemClick, days, sorted }) {
         />)) : ''
 
     return (
-        <ul>{DayItemsArr}</ul>
+        <div className="days-container">{DayItemsArr}</div>
     )
 }
