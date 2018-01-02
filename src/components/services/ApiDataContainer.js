@@ -1,12 +1,13 @@
 import Future from 'fluture'
 import axios from 'axios'
-import { curry, compose, filter, concat, length, prop, propEq, drop, head } from 'ramda'
+import { curry, compose, filter, concat, length, prop, propEq, drop, head, take } from 'ramda'
 
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import DaysListContainer from '../DaysList/DaysListContainer'
 import GraphContainer from '../Graph/GraphContainer'
+import Spinner from '../Spinner/Spinner'
 
 export default class ApiDataContainer extends React.PureComponent {
     static propTypes = {
@@ -14,6 +15,7 @@ export default class ApiDataContainer extends React.PureComponent {
     }
 
     state = {
+        isLoading: true,
         data: [],
         day: 0,
         city: this.props.city,
@@ -27,9 +29,7 @@ export default class ApiDataContainer extends React.PureComponent {
 
     componentWillReceiveProps(nextProps) {
         if (this.state.city !== nextProps.city) {
-            const src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${nextProps.city}`
-
-            this.setState({ city: nextProps.city, mapSrc: src, day: 0 })
+            this.setState({ city: nextProps.city, day: 0 })
 
             this.weatherAjaxRequest(nextProps.city)
 
@@ -55,17 +55,23 @@ export default class ApiDataContainer extends React.PureComponent {
      * [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ...]
      *
      */
+        this.setState({ isLoading: true })
 
         const getData = Future.encaseP(axios.get)
 
-        const usizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=b0982525d17583189a85452554eb7afe`)
+        const unsizedList = getData(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&APPID=b0982525d17583189a85452554eb7afe`)
             .map(res => res.data.list.map(obj => (
                 {
                     ...obj,
                     data: obj.dt_txt.split(' ')[0],
-                    time: obj.dt_txt.split(' ')[1],
+                    time: take(5, obj.dt_txt.split(' ')[1]),
                 }
-            )))
+            ))).chain((lel) => {
+                const src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAxorTm_gngUP-0yAZS-SnLN1CPTu8M2Eo&q=${this.state.city}`
+                this.setState({ errorMsg: false, mapSrc: src, isLoading: false })
+                // this.setState({ isLoading: false })
+                return Future.of(lel)
+            })
 
         /**
          * This function distributes not sorted weather API data by days.
@@ -92,14 +98,11 @@ export default class ApiDataContainer extends React.PureComponent {
             } else setState({ data: groupedData })
         }
 
-        usizedList.fork(
+        unsizedList.fork(
             // reject
             () => this.setState({ errorMsg: true }),
             // resolve
-            (() => {
-                this.setState({ errorMsg: false })
-                return curry(sortByDaysFunc)([], this.setState.bind(this))
-            })(),
+            (() => curry(sortByDaysFunc)([], this.setState.bind(this)))(),
         )
 
     /**
@@ -119,23 +122,32 @@ export default class ApiDataContainer extends React.PureComponent {
                 </h1>
             )
         }
+        if (this.state.isLoading) {
+            return <Spinner />
+        }
         return (
             <Fragment>
-                <iframe
-                    className="map"
-                    title="map"
-                    width="100%"
-                    height="300"
-                    tabIndex="-1"
-                    src={this.state.mapSrc}
-                />
-                <GraphContainer
-                    day={this.state.day === 0 ? this.state.data[0] : this.state.day}
-                />
-                <DaysListContainer
-                    days={this.state.data}
-                    DayItemClick={this.DayItemClick}
-                />
+                <section id="weather">
+                    <div className="column__days-forecast">
+                        <DaysListContainer
+                            days={this.state.data}
+                            DayItemClick={this.DayItemClick}
+                        />
+                    </div>
+                    <div className="column__visual-info">
+                        <GraphContainer
+                            day={this.state.day === 0 ? this.state.data[0] : this.state.day}
+                        />
+                        <div className="map">
+                            <iframe
+                                className="map"
+                                title="map"
+                                tabIndex="-1"
+                                src={this.state.mapSrc}
+                            />
+                        </div>
+                    </div>
+                </section>
             </Fragment>
         )
     }
