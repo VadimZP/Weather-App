@@ -2,7 +2,7 @@
 
 exports[`Return DayItem 1`] = `
 <div
-  className="card"
+  className="day"
   id={1}
   onClick={[Function]}
   onFocus={[Function]}
@@ -10,61 +10,42 @@ exports[`Return DayItem 1`] = `
   role="button"
   tabIndex="0"
 >
-  <div
-    className="card-image"
+  <p
+    className="weekday"
   >
-    <figure
-      className="image is-4by3"
-    >
-      <img
-        alt="weather"
-        src="http://openweathermap.org/img/w/rain.png"
-        style={
-          Object {
-            "height": 50,
-            "width": 50,
-          }
-        }
-      />
-    </figure>
-  </div>
-  <div
-    className="card-content"
+    <b>
+      Monday
+    </b>
+  </p>
+  <img
+    alt="weather"
+    src="http://openweathermap.org/img/w/rain.png"
+    style={
+      Object {
+        "height": 50,
+        "width": 50,
+      }
+    }
+  />
+  <p
+    className="temperature"
   >
-    <div
-      className="media"
-    >
-      <div
-        className="media-content"
-      >
-        <p
-          className="title is-4"
-        >
-          Monday
-        </p>
-        <p>
-          <b>
-            Data
-          </b>
-          : 
-          2017-12-30
-        </p>
-        <p>
-          <b>
-            Min
-          </b>
-          : 
-          -16
-          °C
-          <b>
-            Max
-          </b>
-          : 
-          30
-          °C
-        </p>
-      </div>
-    </div>
-  </div>
+    <b>
+      Max: 
+    </b>
+    30
+    °C 
+    <br />
+    <b>
+      Min: 
+    </b>
+    -16
+    °C
+  </p>
+  <p
+    className="date"
+  >
+    2017-12-30
+  </p>
 </div>
 `;
