@@ -15,7 +15,7 @@ DayItemView.propTypes = {
 export default function DayItemView(props) {
     return (
         <div
-            className="card"
+            className="day"
             id={props.id}
             role="button"
             tabIndex="0"
@@ -23,29 +23,16 @@ export default function DayItemView(props) {
             onKeyDown={() => props.getWeather(props.days)}
             onFocus={() => props.getWeather(props.days)}
         >
-            <div className="card-image">
-                <figure className="image is-4by3">
-                    <img
-                        src={`http://openweathermap.org/img/w/${props.weatherImg}.png`}
-                        style={{ width: 50, height: 50 }}
-                        alt="weather"
-                    />
-                </figure>
-            </div>
-            <div className="card-content">
-                <div className="media">
-                    <div className="media-content">
-                        <p className="title is-4">{props.dayOfTheWeek}</p>
-                        <p>
-                            <b>Data</b>: {props.date}
-                        </p>
-                        <p>
-                            <b>Min</b>: {props.minTemp}°C
-                            <b>Max</b>: {props.maxTemp}°C
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <p className="weekday"><b>{props.dayOfTheWeek}</b></p>
+            <img
+                src={`http://openweathermap.org/img/w/${props.weatherImg}.png`}
+                style={{ width: 50, height: 50 }}
+                alt="weather"
+            />
+            <p className="temperature">
+                <b>Max: </b>{props.maxTemp}°C <br /><b>Min: </b>{props.minTemp}°C
+            </p>
+            <p className="date">{props.date}</p>
         </div>
     )
 }
