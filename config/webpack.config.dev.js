@@ -154,7 +154,7 @@ module.exports = {
                         loader: require.resolve('babel-loader'),
                         options: {
                             presets: ['es2015', 'react'],
-                            plugins: ['transform-class-properties'],
+                            plugins: ['transform-class-properties', 'emotion'],
 
                             // This is a feature of `babel-loader` for webpack (not Babel itself).
                             // It enables caching results in ./node_modules/.cache/babel-loader/
