@@ -1,77 +1,37 @@
 html, body {
   background-color: #EEF5F9;
 }
-svg {
-  display: block;
-  margin: 0 auto;
+.weather-graph {
+  width: 800px;
+  padding: 20px 10px 10px;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+  background: #fff;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: none;
+  position: relative;
+  z-index: 10;
+  &::before {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    content: 'Map is loading...';
+    width: inherit;
+    height: inherit;
+    background-color: #fff;
+  }
 }
 
 .active {
   font-weight: bold;
   color: red;
-}
-
-.navbar-menu {
-  justify-content: center;
-}
-
-.navbar-menu .navbar-start {
-  margin-right: 0;
-}
-
-ul {
-  display: flex;
-  justify-content: space-around;
-  margin: 0 auto 100px !important;
-  width: 1200px;
-}
-
-@media screen and (max-width: 1000px) {
-  ul {
-    display: flex;
-    justify-content: space-around;
-    margin: 0 auto 100px !important;
-    width: 900px !important;
-  }
-}
-
-@media all and (max-width: 1280px) {
-  .card {
-    flex-grow: 1;
-  }
-}
-
-#override-bootstrap {
-  .card {
-    background-color: #fff;
-    border-radius: 0;
-    border: none;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.1), -1px 0 2px rgba(0,0,0,0.05);
-    cursor: pointer;
-  }
-  .card:hover {
-    // box-shadow: 0 2px 17px rgba(10,10,10,0.1), 0 0 0 2px rgba(10,10,10,0.1);
-    transition: 0.5s;
-  }
-  .card-content {
-    padding: 0;
-    padding-bottom: 10px;
-  }
-  .card-image img {
-    margin: auto;
-  }
-}
-
-.media .media-content {
-  text-align: center;
-}
-
-.media-content p.title.is-4 {
-  font-size: 1rem;
-}
-
-.media-content p {
-  font-size: 0.9rem;
 }
 
 .search-form {
@@ -114,7 +74,6 @@ ul {
   
 } 
 
-
 .city-autocomplete {
   width: 200px;
   margin: auto;
@@ -127,5 +86,42 @@ ul {
 .active {
   color: red;
 }
-@media screen and (max-width: 1000px) {
+
+#weather {
+  display: flex;
+  justify-content: center;
+}
+
+.column__days-forecast {
+  margin-right: 20px; 
+}
+
+.column__visual-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* DayItemView */
+
+.day {
+  width: 500px;
+  margin-bottom: 20px;
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Loader
+.loader {
+ text-align: center;
 }
