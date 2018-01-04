@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const { $ } = window
+
 DayItemView.propTypes = {
     days: PropTypes.arrayOf(PropTypes.object),
     date: PropTypes.string,
@@ -13,13 +15,38 @@ DayItemView.propTypes = {
 }
 
 export default function DayItemView(props) {
+    let dayElem = null
     return (
         <div
             className="day"
             id={props.id}
             role="button"
             tabIndex="0"
-            onClick={() => props.getWeather(props.days)}
+            ref={(el) => {
+                dayElem = el
+                return dayElem
+            }}
+            onClick={() => {
+                props.getWeather(props.days)
+
+                if ($(window).width() < 1440) {
+                    const $dayElem = $(dayElem)
+
+                    $dayElem.toggleClass('extended-day')
+
+                    if (!$dayElem.hasClass('extended-day')) {
+                        $dayElem.children().removeClass('shown')
+                    }
+
+                    $dayElem.on('transitionend webkitTransitionEnd oTransitionEnd', () => {
+                        $dayElem.children().addClass('shown')
+
+                        if (!$dayElem.hasClass('extended-day')) {
+                            $dayElem.children().removeClass('shown')
+                        }
+                    })
+                }
+            }}
             onKeyDown={() => props.getWeather(props.days)}
             onFocus={() => props.getWeather(props.days)}
         >
