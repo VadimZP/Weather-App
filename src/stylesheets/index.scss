@@ -1,5 +1,9 @@
 html, body {
   background-color: #EEF5F9;
+  font-size: 16px;
+  @media screen and (max-width: 839px) {
+    font-size: 13px;
+  }
 }
 .weather-graph {
   width: 800px;
@@ -7,6 +11,13 @@ html, body {
   margin-bottom: 20px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
   background: #fff;
+
+  @media screen and (max-width: 1440px) {
+    margin: 0 auto 20px;
+  }
+  @media all and (max-width: 839px)  {
+    width: 95%;
+  }
 }
 
 .map {
@@ -27,6 +38,24 @@ html, body {
     height: inherit;
     background-color: #fff;
   }
+
+  @media screen and (max-width: 1440px) {
+    margin: 0 auto;
+    width: 800px;
+    height: 200px;
+  }
+
+  @media all and (max-width: 839px)  {
+    width: 95%;
+    height: 150px;
+  }
+  @media all and (max-width: 479px)  { 
+    height: 100px;
+  }
+}
+
+.map iframe{
+  width: 100%
 }
 
 .active {
@@ -35,7 +64,7 @@ html, body {
 }
 
 .search-form {
-  margin-top: 100px;
+  margin-top: 10px;
 }
 
 .form-group {
@@ -43,6 +72,10 @@ html, body {
   width: 500px;
   margin: auto;
   display: flex;
+  @media all and (max-width: 839px)  {
+    margin: 0 auto;
+    width: 95%;
+  }
 }
 
 .list-group {
@@ -55,7 +88,6 @@ html, body {
   .form-control {
     outline: none;
     color: rgb(155, 155, 155);
-    margin-right: 20px;
     border-radius: 0;
     &::placeholder {
       color: rgb(155, 155, 155);
@@ -64,11 +96,13 @@ html, body {
   
   .btn-search {
     outline: none;
-    background-color: #99424F;
-    border: #99424F;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgba(0,0,0,.15);
+    color: rgb(155, 155, 155);
+    border-radius: 0;
     cursor: pointer;
     &:hover {
-      background-color: rgb(131, 37, 51);
+      background-color: rgb(240, 240, 240);
     }
   }
   
@@ -83,6 +117,10 @@ html, body {
   visibility: hidden;
 }
 
+.shown {
+  display: block !important;
+}
+
 .active {
   color: red;
 }
@@ -90,10 +128,17 @@ html, body {
 #weather {
   display: flex;
   justify-content: center;
+
+  @media screen and (max-width: 1440px) {
+    flex-direction: column;
+  }
 }
 
 .column__days-forecast {
   margin-right: 20px; 
+  @media screen and (max-width: 1440px) {
+    margin-right: 0;
+  }
 }
 
 .column__visual-info {
@@ -103,22 +148,66 @@ html, body {
 
 /* DayItemView */
 
+.days-container {
+  display: block;
+  @media screen and (max-width: 1440px) {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 20px;
+    width: 420px;
+    position: relative;
+  }
+  @media screen and (max-width: 479px) {
+    width: 95%;
+  }
+}
+
 .day {
   width: 500px;
+  transition: all 0.3s;
   margin-bottom: 20px;
   padding: 25px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
+  outline: none;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  &:last-child {
-    margin-bottom: 0;
-  }
   p {
     margin-bottom: 0;
   }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+    height: 55px;
+    padding: 0 20px;
+    margin-bottom: 0;
+    p:not(.weekday) {
+      display: none;
+    }
+    img {
+      display: none;
+    }
+  }
+  @media all and (max-width: 839px)  {
+    height: 40px;
+  }
+  @media screen and (max-width: 479px) {
+    padding: 0 10px;
+  }
+}
+
+.extended-day {
+  width: 100%;
+  height: 75px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 // Loader
