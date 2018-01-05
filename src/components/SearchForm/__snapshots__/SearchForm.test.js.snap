@@ -10,11 +10,12 @@ exports[`Return SearchForm 1`] = `
     <input
       autoComplete="off"
       className="form-control"
-      id="city_input"
+      id="city-input"
       onChange={[Function]}
       onKeyDown={[Function]}
       placeholder="Enter city"
       type="text"
+      value=""
     />
     <input
       className="btn btn-primary btn-search"
