@@ -1,0 +1,53 @@
+.day {
+  display: flex;
+
+  width: 500px;
+  margin-bottom: 20px;
+  padding: 25px 20px;
+
+  transition: all 0.3s;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $white;
+  outline: none;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  p {
+    margin-bottom: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .shown {
+    display: block !important;
+  }
+  /** @Media  */
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+    height: 55px;
+    margin-bottom: 0;
+    padding: 0 20px;
+    p:not(.weekday) {
+      display: none;
+    }
+    img {
+      display: none;
+    }
+  }
+  @media all and (max-width: 839px) {
+    height: 40px;
+  }
+  @media screen and (max-width: 479px) {
+    padding: 0 10px;
+  }
+  /** @Media  */
+}
+
+.extended-day {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 75px;
+}
