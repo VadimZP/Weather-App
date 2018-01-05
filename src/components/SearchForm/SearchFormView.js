@@ -10,8 +10,29 @@ export default class SearchFormView extends React.Component {
         onClick: PropTypes.func,
     }
 
-    static autocomplete(input) {
+    state = { city: '' }
+
+    onClick = (e) => {
+        e.preventDefault()
+        this.props.onClick(this.state.city)
+    }
+
+    changeCityValueState = (e) => {
+        this.setState({ city: e.target.value })
+        this.autocomplete(e.target)
+    }
+
+    autocomplete = (input) => {
         const cityDiv = $('.city-autocomplete')
+
+        cityDiv.on('click', () => {
+            this.setState({ city: cityDiv.text() })
+            this.props.onClick(this.state.city)
+
+            cityDiv
+                .removeClass('active')
+                .addClass('hidden')
+        })
 
         if (cityDiv.hasClass('hidden')) cityDiv.removeClass('hidden')
 
@@ -41,29 +62,16 @@ export default class SearchFormView extends React.Component {
             }))
     }
 
-    state = { city: null }
-
-
-    onClick = (e) => {
-        e.preventDefault()
-        this.props.onClick(this.state.city)
-    }
-
-    changeCityValueState = (e) => {
-        this.setState({ city: e.target.value })
-        SearchFormView.autocomplete(e.target)
-    }
-
     keyEvents = (e) => {
         const cityDiv = $('.city-autocomplete')
 
         // 'Enter' key
         if (e.keyCode === 13 && cityDiv.hasClass('active')) {
             this.setState({ city: cityDiv.text() })
-            e.target.value = cityDiv.text()
 
-            cityDiv.removeClass('active')
-            cityDiv.addClass('hidden')
+            cityDiv
+                .removeClass('active')
+                .addClass('hidden')
         }
 
         // 'Arrow up' key
@@ -84,9 +92,10 @@ export default class SearchFormView extends React.Component {
                     <input
                         type="text"
                         className="form-control"
-                        id="city_input"
+                        id="city-input"
                         placeholder="Enter city"
                         autoComplete="off"
+                        value={this.state.city}
                         onChange={this.changeCityValueState}
                         onKeyDown={this.keyEvents}
                     />
